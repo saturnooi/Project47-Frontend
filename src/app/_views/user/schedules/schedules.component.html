@@ -1,0 +1,64 @@
+<div class="grid grid-cols-[1fr_2fr] mt-4">
+  <div class="p-4">
+    <div class="grid grid-cols-[1fr_1fr_1fr] gap-x-4">
+      <button type="button"
+        class="bg-white text-custom-main-dark font-semibold py-3 text-xl rounded-lg border-custom-main-super-light border-[1px] drop-shadow-custom-shadow hover:bg-custom-main-light hover:text-white">ทั้งหมด</button>
+      <button type="button"
+        class="bg-custom-main-light text-white font-semibold py-3 text-xl rounded-lg drop-shadow-custom-shadow hover:bg-custom-main-light hover:text-custom-main-dark">วัน</button>
+      <div class="relative">
+        <button type="button"
+          class="flex w-full justify-center bg-white text-custom-main-dark font-semibold py-3 text-xl rounded-lg border-custom-main-super-light border-[1px] drop-shadow-custom-shadow hover:bg-custom-main-light hover:text-white">
+          รอการยืนยัน
+        </button>
+        <div
+          class="flex justify-center items-center absolute -top-3 -right-3 text-white bg-custom-red shadow-lg w-7 h-7 rounded-full">
+          {{waitConfirm}}</div>
+      </div>
+    </div>
+
+    <input placeholder="ค้นหา"
+      class="flex w-full bg-white text-custom-main-dark font-semibold p-3 text-xl rounded-lg border-custom-main-super-light border-[1px] drop-shadow-custom-shadow mt-8 placeholder-custom-main-dark focus:outline-none"
+      type="text" />
+
+    <select aria-label="SortBy"
+      class="flex w-full bg-white text-custom-main-dark font-semibold p-3 text-xl rounded-lg border-custom-main-super-light border-[1px] drop-shadow-custom-shadow mt-8 placeholder-custom-main-dark focus:outline-none"
+      name="sortBy">
+      <option>lorem 1</option>
+      <option>lorem 2</option>
+      <option>lorem 3</option>
+    </select>
+
+    <select aria-label="Filter"
+      class="flex w-full bg-white text-custom-main-dark font-semibold p-3 text-xl rounded-lg border-custom-main-super-light border-[1px] drop-shadow-custom-shadow mt-8 placeholder-custom-main-dark focus:outline-none"
+      name="filter">
+      <option>lorem 1</option>
+      <option>lorem 2</option>
+      <option>lorem 3</option>
+    </select>
+
+    <button type="button"
+      class="flex w-full mt-10 justify-center bg-custom-main-light text-white font-semibold py-3 text-xl rounded-lg drop-shadow-custom-shadow hover:bg-custom-main-light hover:text-custom-main-dark">
+      นัดหมายใหม่
+    </button>
+  </div>
+  <div class="flex flex-col gap-y-6 p-4 overflow-y-auto">
+    <div *ngFor="let schedule of schedules">
+      <div
+        class="grid grid-cols-[1.5fr_1fr] px-4 py-6 rounded-lg text-custom-main-super-dark text-xl bg-opacity-50 bg-custom-main-light">
+        <div class="flex flex-col gap-y-2">
+          <p>ชื่อ - นามสกุล : &nbsp;{{schedule.name}}</p>
+          <p>อาการ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;{{schedule.illness}}</p>
+          <p>ทันตแพทย์&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;{{schedule.dentist}}</p>
+          <p>โรคประจำตัว&nbsp;&nbsp; : &nbsp;{{schedule.congenitalDisease ? schedule.congenitalDisease : "-"}}</p>
+          <p>แพ้ยา&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :
+            &nbsp;{{schedule.drugAllergy ?
+            schedule.drugAllergy : "-"}}</p>
+        </div>
+        <div>
+          <p>เวลา &nbsp;&nbsp;&nbsp;: {{schedule.time}} น.</p>
+          <p>สถานะ : {{schedule.status}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
