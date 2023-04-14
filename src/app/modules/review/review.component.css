@@ -1,0 +1,16 @@
+i.fas.fa-star:before {
+    content: '\f005';
+  }
+  
+  i.fas.fa-star-half-alt:before {
+    content: '\f089';
+  }
+  
+  i.fas.fa-star {
+    font-size: 1.2rem;
+  }
+  
+  .bg-white.rounded-lg.shadow-md.p-4.flex {
+    margin-bottom: 1rem;
+    padding: 1.5rem;
+  }

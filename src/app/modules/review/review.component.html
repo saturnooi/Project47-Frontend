@@ -1,0 +1,28 @@
+<div class="flex flex-col gap-4 w-full gap-4">
+    <div *ngFor="let review of reviews" class="bg-white rounded-lg shadow-md p-4 flex">
+      <div class="flex-shrink-0 ">
+        <img src="{{ review.img || '../../../assets/img/user.png' }}" alt="User Avatar" class="rounded-full h-40 w-40 object-cover">
+
+      </div>
+      <div class="flex-grow flex flex-col justify-between ml-4">
+        <div>
+          <div class="font-medium">{{ review.last_name }}</div>
+          <div class="text-gray-500">{{ review.content }}</div>
+        </div>
+        <div class="flex items-center">
+
+          <div class="flex items-center mt-2">
+            <ng-container *ngFor="let i of [1, 2, 3, 4, 5]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 {{ review.score >= i ? 'text-yellow-400' : 'text-gray-400' }} fill-current" viewBox="0 0 20 20">
+                <path d="M10 1l2.928 6.23 6.572.955-4.75 4.546 1.121 6.52-5.871-3.09-5.871 3.09 1.121-6.52-4.75-4.546 6.572-.955z"/>
+              </svg>
+            </ng-container>
+            <span class="ml-2">{{ review.score.toFixed(1) }}</span>
+          </div>
+          
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  
