@@ -11,18 +11,13 @@ import { QueueComponent } from './modules/queue/queue.component';
 import { QueueModule } from './modules/queue/queue.module';
 import { DentistWorkingModule } from './modules/dentist-working/dentist-working.module';
 import { DentistWorkingComponent } from './modules/dentist-working/dentist-working.component';
-
-// import { UserLayoutComponent } from './components/user-layout/user-layout.component';
-// import { AccessoriesDetailsComponent } from './components/accessories-details/accessories-details.component';
-// import { AccessoriesComponent } from './components/user/accessories/accessories.component';
-// import { SchedulesComponent } from './components/user/schedules/schedules.component';
-// import { CreateNewsComponent } from './components/create-news/create-news.component';
+import { PersonalInformationComponent } from './modules/personal-information/personal-information.component';
 
 const routes: Routes = [
   {
     path: '',
     component: AuthLayoutComponent,
-    // loadChildren: () => import('./components/login/login.module').then(m => m.LoginModule)
+
     children: [
       {
         path: 'login',
@@ -73,10 +68,14 @@ const routes: Routes = [
             (m) => m.DentistWorkingModule
           ),
       },
-      // { path: 'accessories', component: AccessoriesComponent },
-      // { path: 'home', component: SchedulesComponent },
-      // { path: 'create-news', component: CreateNewsComponent },
-      // { path: 'schedules', component: SchedulesComponent },
+      {
+        path: 'personal-information',
+        component: PersonalInformationComponent,
+        loadChildren: () =>
+          import(
+            './modules/personal-information/personal-information.module'
+          ).then((m) => m.PersonalInformationModule),
+      },
     ],
   },
   {

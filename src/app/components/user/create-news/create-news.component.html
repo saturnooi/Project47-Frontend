@@ -9,10 +9,10 @@
       <div class="flex items-center px-3 text-xl rounded-l-lg text-custom-main-dark bg-white hover:bg-custom-gray">
         รูปภาพประกอบหัวข้อ
       </div>
-      <button type="button"
+      <button type="button" (click)="onUpload()"
         class="h-full w-full py-3 text-lg font-semibold rounded-r-lg text-white bg-custom-main-light hover:bg-custom-main-super-light">Upload</button>
       <input id="dropzone-file" class="hidden" placeholder="file" type="file" accept="image/*"
-        (change)="showPreview($event)" />
+      (change)="onFileSelected($event)" />
     </label>
 
     <quill-editor class="content-editor w-full mt-8" trackChanges="all" [styles]="{'min-height': '200px'}"

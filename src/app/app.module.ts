@@ -11,9 +11,17 @@ import { LoginModule } from './components/login/login.module';
 import { AuthLayoutComponent } from './views/auth-layout/auth-layout.component';
 import { UserLayoutComponent } from './views/user-layout/user-layout.component';
 import { CommonModule } from '@angular/common';
+
+
 @NgModule({
-  declarations: [AppComponent,AuthLayoutComponent,UserLayoutComponent],
-  imports: [CommonModule ,BrowserModule, AppRoutingModule, LoginModule,ReactiveFormsModule],
+  declarations: [AppComponent, AuthLayoutComponent, UserLayoutComponent],
+  imports: [
+    CommonModule,
+    BrowserModule,
+    AppRoutingModule,
+    LoginModule,
+    ReactiveFormsModule,
+  ],
 
   providers: [],
 
