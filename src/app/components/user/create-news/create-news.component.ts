@@ -1,7 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 // import { quillConfig } from '@app/constants/defaultValue';
-import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill'
+import { EditorChangeContent, EditorChangeSelection } from 'ngx-quill';
 import { HttpClient } from '@angular/common/http';
 import { SaveimgeService } from 'src/app/services/saveimge/saveimge.service';
 import * as S3 from 'aws-sdk/clients/s3';
@@ -10,16 +10,86 @@ import * as AWS from 'aws-sdk';
   selector: 'app-create-news',
   templateUrl: './create-news.component.html',
 })
-export class CreateNewsComponent {
+export class CreateNewsComponent implements OnInit {
+  ngOnInit() {
+    this.uploadForm = new FormGroup({ editor: new FormControl(null) });
+  }
   @ViewChild('editor') editor: any;
 
   imageURL: string = '';
   blured = false;
   focused = false;
-  modules = {};
-  content = '';
+
   fileToUpload: any = null;
   uploadForm: FormGroup;
+
+  content: any = '<p>Testing</p>';
+  hasFocus = false;
+
+  atValues = [
+    { id: 1, value: 'Fredrik Sundqvist', link: 'https://google.com' },
+    { id: 2, value: 'Patrik Sjölin' },
+  ];
+  hashValues = [
+    { id: 3, value: 'Fredrik Sundqvist 2' },
+    { id: 4, value: 'Patrik Sjölin 2' },
+  ];
+
+  modules = {
+    //toolbar: '.toolbar',
+    toolbar: {
+      container: [
+        ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+        ['code-block'],
+        [{ header: 1 }, { header: 2 }], // custom button values
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+        [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+        [{ direction: 'rtl' }], // text direction
+
+        [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+        [{ font: [] }],
+        [{ align: [] }],
+
+        ['clean'], // remove formatting button
+
+        ['link'],
+        ['link', 'image', 'video'],
+        //  ['emoji'],
+      ],
+      //   handlers: {'emoji': function() {}}
+    },
+  };
+
+  // "emoji-toolbar": true,
+  // "emoji-textarea": false,
+  // "emoji-shortname": true,
+
+  onSelectionChanged = (event: any) => {
+    if (event.oldRange == null) {
+      this.onFocus();
+    }
+    if (event.range == null) {
+      this.onBlur();
+    }
+  };
+
+  onContentChanged = (event: any) => {
+    //console.log(event.html);
+  };
+
+  onFocus = () => {
+    console.log('On Focus');
+  };
+  onBlur = () => {
+    console.log('Blurred');
+  };
+  onbSubmit = () => {
+    const encodedContent = JSON.stringify(this.uploadForm.get('editor')?.value);
+    console.log(encodedContent);
+  };
 
   constructor(
     public fb: FormBuilder,
@@ -79,6 +149,8 @@ export class CreateNewsComponent {
         endpoint: spacesEndpoint,
         accessKeyId: 'DO00WX7E9PZJ2GW7JEUT',
         secretAccessKey: 'rrD/Ns8sDwUUkgSpef/U7TFEoiShdjcMgbDVUvlENog',
+        region: 'sgp1',
+        signatureVersion: 'v4',
       });
 
       const filename = this.fileToUpload.name;
@@ -86,9 +158,8 @@ export class CreateNewsComponent {
         Bucket: 'project-47',
         Key: filename,
         Body: this.fileToUpload,
-        Headers: { 'Access-Control-Allow-Origin' : '*' },
       };
-      console.log(params);
+
       s3.upload(params, (err: any, data: any) => {
         console.log(`Image uploaded to ${data}`);
         resolve(data);
@@ -104,7 +175,7 @@ export class CreateNewsComponent {
   changedEditor(event: EditorChangeContent | EditorChangeSelection | Event) {
     // tslint:disable-next-line:no-console
     // const html = event.html
-    // console.log( event.data)
+    console.log(event);
   }
 
   focus($event: any) {

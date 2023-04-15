@@ -1,5 +1,5 @@
 <div class="mt-8">
-  <form>
+ 
     <input placeholder="หัวข้อข่าว"
       class="flex w-2/5 bg-white text-custom-main-dark py-3 px-4 text-xl rounded-lg border-custom-main-super-light border drop-shadow-custom-shadow mt-8 placeholder-custom-main-dark focus:outline-none"
       type="text" />
@@ -14,13 +14,20 @@
       <input id="dropzone-file" class="hidden" placeholder="file" type="file" accept="image/*"
       (change)="onFileSelected($event)" />
     </label>
-
-    <quill-editor class="content-editor w-full mt-8" trackChanges="all" [styles]="{'min-height': '200px'}"
-      [modules]="modules" [placeholder]="''" (onFocus)="focus($event)" (onEditorChanged)="changedEditor($event)"
+  
+    <form [formGroup]="uploadForm" (ngSubmit)="onbSubmit()
+    ">
+    <quill-editor formControlName="editor" lass="content-editor w-full mt-8" trackChanges="all"  [styles]="{'min-height': '200px'}"
+      [(ngModel)]="content"
+       [modules]="modules" [placeholder]="''" (onFocus)="focus($event)" (onEditorChanged)="changedEditor($event)"
       (onBlur)="blur($event)" (onEditorCreated)="created($event)">
     </quill-editor>
-    <pre><code>{{ content }}</code></pre>
 
+    <button type="submit"
+        class="flex w-full mt-5 justify-center items-center gap-x-2 bg-custom-main text-white font-medium py-3 px-8 text-xl rounded-lg drop-shadow-custom-shadow hover:bg-custom-main-light hover:text-custom-main-dark">
+        ยืนยัน
+      </button>
+  </form>
     <div class="py-3 grid grid-cols-2 gap-x-3 w-2/5">
       <button type="reset"
         class="flex w-full mt-5 justify-center items-center gap-x-2 bg-custom-gray-mini-dark text-custom-gray-dark font-medium py-3 px-8 text-xl rounded-lg drop-shadow-custom-shadow hover:bg-gray-400 hover:text-black">
@@ -32,5 +39,9 @@
         ยืนยัน
       </button>
     </div>
-  </form>
+  
+
+
+
+  <quill-view-html [content]="content" theme="snow"></quill-view-html>
 </div>
