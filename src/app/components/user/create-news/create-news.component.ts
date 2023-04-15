@@ -147,8 +147,10 @@ export class CreateNewsComponent implements OnInit {
       const spacesEndpoint = new AWS.Endpoint('sgp1.digitaloceanspaces.com');
       const s3 = new S3({
         endpoint: spacesEndpoint,
-        accessKeyId: 'DO00WX7E9PZJ2GW7JEUT',
-        secretAccessKey: 'rrD/Ns8sDwUUkgSpef/U7TFEoiShdjcMgbDVUvlENog',
+
+        accessKeyId: 'DO00A24Q8GPTQ2QXJMPK',
+        secretAccessKey: 'ghJ6UZTy5+gv2fABcW9pq89sgQnE7lKVfBGfum0rnHk',
+
         region: 'sgp1',
         signatureVersion: 'v4',
       });
@@ -158,6 +160,7 @@ export class CreateNewsComponent implements OnInit {
         Bucket: 'project-47',
         Key: filename,
         Body: this.fileToUpload,
+        ACL: 'private',
       };
 
       s3.upload(params, (err: any, data: any) => {

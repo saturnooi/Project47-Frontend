@@ -11,7 +11,7 @@ import { LoginModule } from './components/login/login.module';
 import { AuthLayoutComponent } from './views/auth-layout/auth-layout.component';
 import { UserLayoutComponent } from './views/user-layout/user-layout.component';
 import { CommonModule } from '@angular/common';
-
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent, AuthLayoutComponent, UserLayoutComponent],
@@ -21,6 +21,7 @@ import { CommonModule } from '@angular/common';
     AppRoutingModule,
     LoginModule,
     ReactiveFormsModule,
+    HttpClientModule,
   ],
 
   providers: [],
