@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Build the application
-RUN npm run build --prod
+RUN npm run build 
 
 # Use an official Nginx image as a parent image
 FROM nginx
