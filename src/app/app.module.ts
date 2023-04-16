@@ -12,9 +12,10 @@ import { AuthLayoutComponent } from './views/auth-layout/auth-layout.component';
 import { UserLayoutComponent } from './views/user-layout/user-layout.component';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @NgModule({
-  declarations: [AppComponent, AuthLayoutComponent, UserLayoutComponent],
+  declarations: [AppComponent, AuthLayoutComponent, UserLayoutComponent, NavbarComponent,NavbarComponent],
   imports: [
     CommonModule,
     BrowserModule,
@@ -22,6 +23,7 @@ import { HttpClientModule } from '@angular/common/http';
     LoginModule,
     ReactiveFormsModule,
     HttpClientModule,
+    
   ],
 
   providers: [],

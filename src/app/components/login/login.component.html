@@ -1,54 +1,72 @@
 <div class="h-full p-2 flex flex-col lg:grid lg:grid-cols-2">
-    <div
-      class="hidden lg:flex col-span-1 h-full bg-custom-blue flex-col text-white justify-center items-center rounded-tr-2xl rounded-tl-2xl lg:rounded-bl-2xl lg:rounded-tr-none p-8 shadow-2xl">
-      <img src="assets/img/login-icon.png" class="w-[70%]" alt="" />
-      <!-- <a routerLink="../register">Not have an account ?</a> -->
-    </div>
-    <div
-      class="col-span-1 flex flex-col justify-center items-center h-full rounded-2xl lg:rounded-tl-none lg:rounded-bl-none py-8 px-4 md:px-8 2xl:px-32 bg-white shadow-2xl">
-      <img
-        src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/business-logo-design-template-78655edda18bc1196ab28760f1535baa_screen.jpg?ts=1617645324"
-        alt="login-logo" class="w-64" />
-      <!-- <p class="text-4xl">Login</p> -->
-      <p class="hidden lg:flex text-center mt-5 -translate-y-10">Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-        Quod illum
-        tenetur fugiat eos
-        ipsam! Iusto unde quo
-        distinctio cumque placeat, modi doloremque officiis tempora laudantium incidunt quos quia exercitationem tenetur.
-      </p>
-      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-y-5 w-full">
-        <div class="flex flex-col w-full">
-          <label for="username" class="mb-2 text-lg font-semibold">Username</label>
-          <input id="username" name="username" type="text" formControlName="username"
-            class="border-[1px] rounded-lg text-lg px-2 py-2 focus:outline-none bg-gray-50"
-            >
-            <!-- [ngClass]="{ 'invalid': submitted && f['username'].errors }" /> -->
-          <div *ngIf="submitted && f['username'].errors" class="text-red-500">
-            <div *ngIf="f['username'].errors['required']">Username is required</div>
-          </div>
-        </div>
-        <div class="flex flex-col w-full">
-          <label for="password" class="mb-2 text-lg font-semibold">Password</label>
-          <input type="password" id="password" formControlName="password"
-            class="border-[1px] rounded-lg text-lg px-2 py-2 focus:outline-none bg-gray-50"
-            >
-            <!-- [ngClass]="{ 'invalid': submitted && f['password'].errors }" /> -->
-          <div *ngIf="submitted && f['password'].errors" class="text-red-500">
-            <div *ngIf="f['password'].errors['required']">Password is required</div>
-          </div>
-        </div>
-        <div class="h-10 flex gap-x-3 justify-end">
-          <button type="submit" [disabled]="loading"
-            class="bg-custom-blue hover:bg-blue-500 text-white font-bold h-full px-6 rounded">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
-            Login
-          </button>
-  
-          <button type="reset"
-            class="bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white h-full px-6 border border-red-500 hover:border-transparent rounded">
-            Reset
-          </button>
-        </div>
-      </form>
-    </div>
+  <div
+    class="hidden lg:flex col-span-1 h-full  flex-col text-white justify-center items-center rounded-tr-2xl rounded-tl-2xl lg:rounded-bl-2xl lg:rounded-tr-none p-8 shadow-2xl">
+    <img src="assets/img/undraw_medicine_b-1-ol (1).svg" class="w-[80%]" alt="" />
+    <!-- <a routerLink="../register">Not have an account ?</a> -->
   </div>
+  <div
+    class="col-span-1 flex flex-col justify-center items-center h-full rounded-2xl lg:rounded-tl-none lg:rounded-bl-none py-8 px-4 md:px-8 2xl:px-32 bg-white shadow-2xl">
+    <!-- <img
+      src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/business-logo-design-template-78655edda18bc1196ab28760f1535baa_screen.jpg?ts=1617645324"
+      alt="login-logo" class="w-64" /> -->
+    <div class="text-custom-main text-[5rem] font-semibold">We Smile</div>
+    <!-- <p class="text-4xl">Login</p> -->
+    
+    <div class="flex justify-center">
+      <button 
+        [class.bg-custom-main-light]="selectedRole === 'staff'" 
+        [class.text-white]="selectedRole === 'staff'"
+        [class.bg-white]="selectedRole !== 'staff'" 
+        [class.text-gray-700]="selectedRole !== 'staff'"
+        (click)="selectedRole = 'staff'" 
+        class="py-2 px-4 border border-custom-gray rounded-l hover:bg-custom-main hover:text-white focus:outline-none focus:bg-custom-main-light focus:text-white transition-colors duration-300">
+        Staff
+      </button>
+      <button 
+        [class.bg-custom-main-light]="selectedRole === 'dentist'" 
+        [class.text-white]="selectedRole === 'dentist'"
+        [class.bg-white]="selectedRole !== 'dentist'" 
+        [class.text-gray-700]="selectedRole !== 'dentist'"
+        (click)="selectedRole = 'dentist'" 
+        class="py-2 px-4 border border-custom-gray rounded-r hover:bg-custom-main hover:text-white focus:outline-none focus:bg-custom-main-light focus:text-white transition-colors duration-300">
+        Dentist
+      </button>
+    </div>
+    
+    
+    
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-y-5 w-full">
+      <div class="flex flex-col w-full">
+        <label for="username" class="mb-2 text-lg font-semibold">Username</label>
+        <input id="username" name="username" type="text" formControlName="username"
+          class="border-[1px] rounded-lg text-lg px-2 py-2 focus:outline-none bg-gray-50"
+          [ngClass]="{ 'invalid': submitted && f['username'].errors }" />
+        <div *ngIf="submitted && f['username'].errors" class="text-red-500">
+          <div *ngIf="f['username'].errors['required']">Username is required</div>
+        </div>
+      </div>
+      <div class="flex flex-col w-full">
+        <label for="password" class="mb-2 text-lg font-semibold">Password</label>
+        <input type="password" id="password" formControlName="password"
+          class="border-[1px] rounded-lg text-lg px-2 py-2 focus:outline-none bg-gray-50"
+          [ngClass]="{ 'invalid': submitted && f['password'].errors }" />
+        <div *ngIf="submitted && f['password'].errors" class="text-red-500">
+          <div *ngIf="f['password'].errors['required']">Password is required</div>
+        </div>
+      </div>
+      <div class="h-10 flex gap-x-3 justify-end">
+        <button type="submit" [disabled]="loading"
+          class="bg-custom-blue hover:bg-blue-500 text-white font-bold h-full px-6 rounded">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+          Login
+        </button>
+
+        <button type="reset"
+          class="bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white h-full px-6 border border-red-500 hover:border-transparent rounded">
+          Reset
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

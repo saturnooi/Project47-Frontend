@@ -4,9 +4,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "custom-blue-pale": "rgba(75, 183, 214, 0.4)",
-        "custom-blue": "rgb(75, 183, 214)",
         "custom-blue": "#285DC8",
+        "custom-light-aqua": "#E7EDFF",
         "custom-main": "#218C9F",
         "custom-main-light": "#4BB7D6",
         "custom-main-super-light": "#8fc5d4",
@@ -28,6 +27,10 @@ module.exports = {
       },
       dropShadow: {
         "custom-shadow": "0px 4px 4px rgba(75, 183, 214, 0.4)",
+        "custom-input-shadow": "0px 4px 4px rgba(75, 183, 214, 0.2)",
+      },
+      boxShadow: {
+        "custom-shadow-box": "0 8px 30px rgba(0,0,0,0.12)",
       },
     },
   },

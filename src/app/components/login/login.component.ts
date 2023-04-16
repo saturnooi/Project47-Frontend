@@ -12,6 +12,7 @@ import { AlertService } from 'src/app/services/alert/alert-service.service';
 export class LoginComponent implements OnInit {
   form!: FormGroup;
   loading = false;
+  selectedRole = 'staff';
   submitted = false;
     // private formBuilder: FormBuilder,
     // private route: ActivatedRoute,
@@ -36,7 +37,7 @@ export class LoginComponent implements OnInit {
   get f() {
     return this.form.controls;
   }
-
+  
   onSubmit() {
     this.submitted = true;
 

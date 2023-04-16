@@ -84,6 +84,20 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/review/review.module').then((m) => m.ReviewModule),
   },
+  {
+    path: 'blog',
+    component: UserLayoutComponent,
+    loadChildren: () =>
+      import('./modules/blog/blog.module').then((m) => m.BlogModule),
+  },
+  {
+    path: 'dentists',
+    component: UserLayoutComponent,
+    loadChildren: () =>
+      import('./modules/dentists/dentists.module').then(
+        (m) => m.DentistsModule
+      ),
+  },
 ];
 
 @NgModule({
