@@ -16,88 +16,98 @@ import { PersonalInformationComponent } from './modules/personal-information/per
 const routes: Routes = [
   {
     path: '',
-    component: AuthLayoutComponent,
-
-    children: [
-      {
-        path: 'login',
-        loadChildren: () =>
-          import('./components/login/login.module').then((m) => m.LoginModule),
-      },
-    ],
-  },
-  {
-    path: 'staff',
     component: UserLayoutComponent,
     children: [
       {
-        path: 'accessories-details',
-        component: AccessoriesDetailsComponent,
+        path: '',
         loadChildren: () =>
-          import('./components/user/user.module').then((m) => m.UserModule),
+          import('./modules/home/home.module').then((m) => m.HomeModule),
+      },
+      { path: 'service', loadChildren: () => import('./modules/service/service.module').then(m => m.ServiceModule) },
+      {
+        path: 'review',
+        loadChildren: () =>
+          import('./modules/review/review.module').then((m) => m.ReviewModule),
       },
       {
-        path: 'accessories',
-        component: AccessoriesComponent,
+        path: 'blog',
         loadChildren: () =>
-          import('./components/user/user.module').then((m) => m.UserModule),
+          import('./modules/blog/blog.module').then((m) => m.BlogModule),
       },
       {
-        path: 'create-news',
-        component: CreateNewsComponent,
+        path: 'dentists',
         loadChildren: () =>
-          import('./components/user/user.module').then((m) => m.UserModule),
-      },
-      {
-        path: 'schedules',
-        component: SchedulesComponent,
-        loadChildren: () =>
-          import('./components/user/user.module').then((m) => m.UserModule),
-      },
-      {
-        path: 'queue',
-        component: QueueComponent,
-        loadChildren: () =>
-          import('./modules/queue/queue.module').then((m) => m.QueueModule),
-      },
-      {
-        path: 'dentist-working',
-        component: DentistWorkingComponent,
-        loadChildren: () =>
-          import('./modules/dentist-working/dentist-working.module').then(
-            (m) => m.DentistWorkingModule
+          import('./modules/dentists/dentists.module').then(
+            (m) => m.DentistsModule
           ),
       },
       {
-        path: 'personal-information',
-        component: PersonalInformationComponent,
-        loadChildren: () =>
-          import(
-            './modules/personal-information/personal-information.module'
-          ).then((m) => m.PersonalInformationModule),
+        path: 'staff',
+        children: [
+          {
+            path: '',
+            loadChildren: () =>
+              import('./modules/home/home.module').then((m) => m.HomeModule),
+          },
+          {
+            path: 'accessories-details',
+            component: AccessoriesDetailsComponent,
+            loadChildren: () =>
+              import('./components/user/user.module').then((m) => m.UserModule),
+          },
+          {
+            path: 'accessories',
+            component: AccessoriesComponent,
+            loadChildren: () =>
+              import('./components/user/user.module').then((m) => m.UserModule),
+          },
+          {
+            path: 'create-news',
+            component: CreateNewsComponent,
+            loadChildren: () =>
+              import('./components/user/user.module').then((m) => m.UserModule),
+          },
+          {
+            path: 'schedules',
+            component: SchedulesComponent,
+            loadChildren: () =>
+              import('./components/user/user.module').then((m) => m.UserModule),
+          },
+          {
+            path: 'queue',
+            component: QueueComponent,
+            loadChildren: () =>
+              import('./modules/queue/queue.module').then((m) => m.QueueModule),
+          },
+          {
+            path: 'dentist-working',
+            component: DentistWorkingComponent,
+            loadChildren: () =>
+              import('./modules/dentist-working/dentist-working.module').then(
+                (m) => m.DentistWorkingModule
+              ),
+          },
+          {
+            path: 'personal-information',
+            component: PersonalInformationComponent,
+            loadChildren: () =>
+              import(
+                './modules/personal-information/personal-information.module'
+              ).then((m) => m.PersonalInformationModule),
+          },
+        ],
       },
     ],
   },
+
   {
-    path: 'review',
-    component: UserLayoutComponent,
+    path: 'login',
+    component: AuthLayoutComponent,
+
     loadChildren: () =>
-      import('./modules/review/review.module').then((m) => m.ReviewModule),
+      import('./components/login/login.module').then((m) => m.LoginModule),
   },
-  {
-    path: 'blog',
-    component: UserLayoutComponent,
-    loadChildren: () =>
-      import('./modules/blog/blog.module').then((m) => m.BlogModule),
-  },
-  {
-    path: 'dentists',
-    component: UserLayoutComponent,
-    loadChildren: () =>
-      import('./modules/dentists/dentists.module').then(
-        (m) => m.DentistsModule
-      ),
-  },
+  
 ];
 
 @NgModule({

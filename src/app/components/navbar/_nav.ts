@@ -5,7 +5,7 @@ export const defaultNav = [
   },
   {
     name: 'ค่าบริการ',
-    path: '',
+    path: '/service',
   },
   {
     name: 'ข่าวสาร',
@@ -32,11 +32,11 @@ export const staffNav = [
       },
     {
       name: 'ค่าบริการ',
-      path: '',
+      path: '/service',
     },
     {
       name: 'ข่าวสาร',
-      path: '/staff/create-news',
+      path: '/blog',
     },
     {
         name: 'อุปกรณ์',

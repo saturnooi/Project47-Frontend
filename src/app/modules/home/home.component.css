@@ -1,0 +1,14 @@
+/* CSS for news item container */
+.news-item-container {
+    transition: transform 0.10s ease-in-out;
+  }
+  
+  /* CSS for hiding/showing news items */
+  .news-item-container.hidden {
+    display: none;
+  }
+  
+  /* CSS for showing news items */
+  .news-item-container:not(.hidden) {
+    transform: translateX(0);
+  }

@@ -1,12 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 @Component({
-  selector: 'app-blog',
-  templateUrl: './blog.component.html',
-  styleUrls: ['./blog.component.css'],
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css'],
+  animations: [
+    trigger('slide', [
+      transition(':increment', [
+        style({ position: 'relative', left: 0 }),
+        animate(
+          '500ms ease-in-out',
+          style({ position: 'relative', left: '-100%' })
+        ),
+      ]),
+      transition(':decrement', [
+        style({ position: 'relative', left: 0 }),
+        animate(
+          '500ms ease-in-out',
+          style({ position: 'relative', left: '100%' })
+        ),
+      ]),
+    ]),
+  ],
 })
-export class BlogComponent {
-  blogPosts = [
+export class HomeComponent implements OnInit {
+  newsList = [
     {
       id: 1,
       topic: 'Dental implants solve tooth loss problems',
@@ -52,9 +71,44 @@ export class BlogComponent {
     {
       id: 7,
       topic: 'Common dental problems and how to prevent them',
-      img: '',
+      img: 'https://project-47.sgp1.digitaloceanspaces.com/blog/333850256_1376115003210566_6169689804045578564_n.jpg',
       sub: 'Common dental problems include cavities, gum disease, and tooth sensitivity. These problems can be prevented by practicing good oral hygiene, eating a healthy diet, and visiting the dentist regularly.',
       create_at: '2023-04-17 12:00:00',
     },
-  ];
+    {
+      id: 8,
+      topic: 'Common dental problems and how to prevent them',
+      img: 'https://project-47.sgp1.digitaloceanspaces.com/blog/333850256_1376115003210566_6169689804045578564_n.jpg',
+      sub: 'Common dental problems include cavities, gum disease, and tooth sensitivity. These problems can be prevented by practicing good oral hygiene, eating a healthy diet, and visiting the dentist regularly.',
+      create_at: '2023-04-17 12:00:00',
+    },
+    {
+      id: 9,
+      topic: 'The different types of dental fillings',
+      img: 'https://project-47.sgp1.digitaloceanspaces.com/blog/335158455_537778948344332_5717943067385041327_n.jpg',
+      sub: 'Dental fillings are used to repair cavities caused by tooth decay. There are several different types of dental fillings, including amalgam, composite, ceramic, and gold fillings.',
+      create_at: '2023-04-17 12:00:00',
+    },
+  ]; // array to store news data
+  startIndex = 0; // starting index for news display
+
+  ngOnInit(): void {
+    // load news data here
+    // this.loadNewsData();
+
+    // set interval to change news after every 10 seconds
+    setInterval(() => {
+      this.startIndex += 3; // increment start index by 3 to show next 3 news
+      if (this.startIndex >= this.newsList.length) {
+        this.startIndex = 0; // if all news have been displayed, start from the first news again
+      }
+    }, 5000);
+  }
+
+  // loadNewsData(): void {
+  //   // load news data from server or API and store in newsList array
+  //   this.newsList = [
+  //     // news data here
+  //   ];
+  // }
 }
