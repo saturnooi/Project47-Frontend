@@ -95,6 +95,8 @@ const routes: Routes = [
                 './modules/personal-information/personal-information.module'
               ).then((m) => m.PersonalInformationModule),
           },
+          
+          { path: 'profile', loadChildren: () => import('./modules/staff-profile/staff-profile.module').then(m => m.StaffProfileModule) },
         ],
       },
     ],
@@ -107,6 +109,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./components/login/login.module').then((m) => m.LoginModule),
   },
+  
   
 ];
 

@@ -1,0 +1,101 @@
+<div class="py-7 px-4">
+    <div class="grid grid-cols-[200px_1fr] gap-x-4">
+      <div>
+        <div [ngClass]="imageURL && imageURL !== '' ? 'hidden' : 'block'"
+          class="w-full h-[250px] bg-custom-gray-mini-dark shadow-lg"></div>
+        <img [ngClass]="imageURL && imageURL !== '' ? 'flex' : 'hidden'" class="w-full h-auto" src={{imageURL}}
+          alt="profile image" />
+        <label for="dropzone-file"
+          class="flex items-center justify-center mt-4 px-3 py-2 font-semibold rounded-xl text-custom-main-super-super-dark bg-white hover:bg-custom-gray drop-shadow-custom-input-shadow border border-custom-main-light">
+          Upload profile
+          <input (change)="showPreview($event)" id="dropzone-file" class="hidden" placeholder="file" type="file"
+            accept="image/*" />
+        </label>
+      </div>
+      <div>
+        <div class="flex gap-x-4">
+          <button type="button" (click)="onActiveChange(0)"
+            [ngClass]="active === 0 ? 'bg-custom-main-light text-white drop-shadow-custom-shadow' : 'bg-white text-custom-main-super-super-dark drop-shadow-custom-input-shadow hover:bg-custom-main-light hover:text-white hover:drop-shadow-custom-shadow'"
+            class="flex justify-center items-center h-12 w-28 border border-custom-main-light rounded-lg">ข้อมูลส่วนตัว</button>
+        
+        </div>
+  
+        <div class="h-[1px] w-3/5 mt-4 mb-8 bg-custom-main-light"></div>
+  
+        <!-- page 1 -->
+        <div [ngClass]="active === 0 ? 'grid' : 'hidden'" class="grid-cols-[112px_1fr_112px_1fr] gap-x-4 gap-y-8">
+  
+          <!-- line 1 -->
+          <select aria-label="prefix"
+            class="bg-white text-custom-main-super-super-dark flex justify-center items-center h-12 w-full border border-custom-main-light rounded-xl drop-shadow-custom-input-shadow appearance-none focus:outline-none"
+            name="prefix">
+            <option class="text-center">ท.พ.</option>
+            <option class="text-center">น.พ.</option>
+            <option class="text-center">พ.ญ.</option>
+          </select>
+          <input type="text" name="name" id="name" placeholder="ชื่อ - สกุล"
+            class="bg-white text-custom-main-super-super-dark flex justify-center items-center h-12 w-full border border-custom-main-light rounded-xl px-5 focus:outline-none drop-shadow-custom-input-shadow">
+         
+  
+          <!-- line 2 -->
+          <label for="email" class="flex items-center justify-center">Email</label>
+          <input type="text" name="email" id="email"
+            class="bg-white text-custom-main-super-super-dark flex justify-center items-center h-12 w-full border border-custom-main-light rounded-xl px-5 focus:outline-none drop-shadow-custom-input-shadow">
+          <label for="phone" class="flex items-center justify-center">เบอร์โทร</label>
+          <input type="text" name="phone" id="phone"
+            class="bg-white text-custom-main-super-super-dark flex justify-center items-center h-12 w-full border border-custom-main-light rounded-xl px-5 focus:outline-none drop-shadow-custom-input-shadow">
+  
+          <!-- line 3 -->
+          <label for="sex" class="flex items-center justify-center">เพศ</label>
+          <div class="grid grid-cols-3 gap-x-3">
+            <select aria-label="sex"
+              class="bg-white text-custom-main-super-super-dark flex justify-center items-center h-12 w-full border border-custom-main-light rounded-xl drop-shadow-custom-input-shadow appearance-none focus:outline-none"
+              name="sex">
+              <option class="text-center">ชาย</option>
+              <option class="text-center">หญิง</option>
+            </select>
+            <label for="national" class="flex items-center justify-center">สัญชาติ</label>
+            <input type="text" name="national" id="national"
+              class="bg-white text-custom-main-super-super-dark flex justify-center items-center h-12 w-full border border-custom-main-light rounded-xl px-5 focus:outline-none drop-shadow-custom-input-shadow">
+          </div>
+          <label for="region" class="flex items-center justify-center">เชื้อชาติ</label>
+          <input type="text" name="region" id="region"
+            class="bg-white text-custom-main-super-super-dark flex justify-center items-center h-12 w-1/3 border border-custom-main-light rounded-xl px-5 focus:outline-none drop-shadow-custom-input-shadow">
+  
+          <!-- line 4 -->
+          <label for="bod" class="h-12 flex items-center justify-center">วันเกิด</label>
+          <input type="date" name="bod" id="bod"
+            class="bg-white text-custom-main-super-super-dark flex justify-center items-center h-12 w-full border border-custom-main-light rounded-xl px-5 focus:outline-none drop-shadow-custom-input-shadow">
+          <label for="address" class="h-12 flex items-center justify-center">ที่อยู่</label>
+          <textarea rows="4" name="address" id="address"
+            class="bg-white text-custom-main-super-super-dark flex justify-center items-center w-full border border-custom-main-light rounded-xl px-5 focus:outline-none drop-shadow-custom-input-shadow"></textarea>
+  
+          <!-- line 5 -->
+          <label for="username" class="flex items-center justify-center">Username</label>
+          <input type="text" name="username" id="username"
+            class="bg-white text-custom-main-super-super-dark flex justify-center items-center h-12 w-full border border-custom-main-light rounded-xl px-5 focus:outline-none drop-shadow-custom-input-shadow">
+          <div></div>
+          <div></div>
+  
+          <!-- line 6 -->
+          <label for="password" class="flex items-center justify-center">Password</label>
+          <input type="text" name="password" id="password"
+            class="bg-white text-custom-main-super-super-dark flex justify-center items-center h-12 w-full border border-custom-main-light rounded-xl px-5 focus:outline-none drop-shadow-custom-input-shadow">
+          <div></div>
+          <div></div>
+  
+          <!-- line 7 -->
+          <div></div>
+          <button type="button"
+            class="flex justify-center items-center h-12 bg-custom-main-light w-fit px-4 text-white rounded-xl hover:bg-custom-main-super-light">แก้ไขข้อมูล</button>
+          <div></div>
+          <div></div>
+  
+        </div>
+  
+       
+  
+      </div>
+    </div>
+  </div>
+  
