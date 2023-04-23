@@ -1,0 +1,5 @@
+
+<div *ngIf="isLoading" class="text-center">Loading...</div>
+<div *ngIf="!isLoading">
+    <quill-view-html [content]="content" theme="snow"></quill-view-html>
+</div>

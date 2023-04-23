@@ -13,9 +13,12 @@ import { UserLayoutComponent } from './views/user-layout/user-layout.component';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { ForbiddenComponent } from './errors/forbidden/forbidden.component';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
+
 
 @NgModule({
-  declarations: [AppComponent, AuthLayoutComponent, UserLayoutComponent, NavbarComponent,NavbarComponent],
+  declarations: [AppComponent, AuthLayoutComponent, UserLayoutComponent, NavbarComponent,NavbarComponent, ForbiddenComponent, NotFoundComponent],
   imports: [
     CommonModule,
     BrowserModule,

@@ -1,60 +1,131 @@
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, Input, OnInit } from '@angular/core';
+import { AuthService } from 'src/app/services/auth/auth-service.service';
+import { environment } from 'src/environments/environment';
+import { ToastrService } from 'ngx-toastr';
+
+interface Post {
+  id: number;
+  topic: string;
+  img: string;
+  content: string;
+  create_at: Date;
+}
 
 @Component({
   selector: 'app-blog',
   templateUrl: './blog.component.html',
   styleUrls: ['./blog.component.css'],
 })
-export class BlogComponent {
-  blogPosts = [
-    {
-      id: 1,
-      topic: 'Dental implants solve tooth loss problems',
-      img: 'https://project-47.sgp1.digitaloceanspaces.com/blog/328826896_971407020562041_1061909101623740239_n.jpg',
-      sub: 'Dental implants are screw-like titanium or ceramic implants placed into the jaw. by using dental implants as the basis for fixing crowns and bridges Dental implants are screw-like titanium or ceramic implants placed into the jaw. by using dental implants as the basis for fixing crowns and bridges',
-      create_at: '2023-04-17 12:00:00',
-    },
-    {
-      id: 2,
-      topic: 'The importance of regular dental check-ups',
-      img: 'https://project-47.sgp1.digitaloceanspaces.com/blog/333378091_702341454972631_2235135710218911810_n.jpg',
-      sub: 'Regular dental check-ups can help detect dental problems early and prevent more serious issues from developing. During a check-up, a dentist will examine your teeth and gums, check for signs of cavities, gum disease, and oral cancer.',
-      create_at: '2023-04-17 12:00:00',
-    },
-    {
-      id: 3,
-      topic: 'The benefits of teeth whitening',
-      img: 'https://project-47.sgp1.digitaloceanspaces.com/blog/333850256_1376115003210566_6169689804045578564_n.jpg',
-      sub: 'Teeth whitening is a cosmetic dental procedure that can improve the appearance of your smile. It involves using a bleaching agent to remove stains and discoloration from the teeth, leaving them whiter and brighter.',
-      create_at: '2023-04-17 12:00:00',
-    },
-    {
-      id: 4,
-      topic: 'The importance of good oral hygiene',
-      img: 'https://project-47.sgp1.digitaloceanspaces.com/blog/335158455_537778948344332_5717943067385041327_n.jpg',
-      sub: 'Good oral hygiene is important for maintaining healthy teeth and gums. This includes brushing twice a day, flossing daily, and using mouthwash to kill bacteria and freshen breath.',
-      create_at: '2023-04-17 12:00:00',
-    },
-    {
-      id: 5,
-      topic: 'The different types of dental fillings',
-      img: 'https://project-47.sgp1.digitaloceanspaces.com/blog/335158455_537778948344332_5717943067385041327_n.jpg',
-      sub: 'Dental fillings are used to repair cavities caused by tooth decay. There are several different types of dental fillings, including amalgam, composite, ceramic, and gold fillings.',
-      create_at: '2023-04-17 12:00:00',
-    },
-    {
-      id: 6,
-      topic: 'The benefits of fluoride for dental health',
-      img: 'https://project-47.sgp1.digitaloceanspaces.com/blog/333850256_1376115003210566_6169689804045578564_n.jpg',
-      sub: 'Fluoride is a mineral that can help prevent tooth decay by strengthening tooth enamel. It is found in toothpaste, mouthwash, and in some public water supplies.',
-      create_at: '2023-04-17 12:00:00',
-    },
-    {
-      id: 7,
-      topic: 'Common dental problems and how to prevent them',
-      img: '',
-      sub: 'Common dental problems include cavities, gum disease, and tooth sensitivity. These problems can be prevented by practicing good oral hygiene, eating a healthy diet, and visiting the dentist regularly.',
-      create_at: '2023-04-17 12:00:00',
-    },
-  ];
+export class BlogComponent implements OnInit {
+  blogPosts: Post[] = [];
+  isStaff: boolean = false;
+  currentPage = 1;
+  itemsPerPage = 9;
+  totalItems = 0;
+  searchQuery: string = '';
+  isLoading: boolean = false;
+  isOpenModal: boolean = false;
+  IdDelete?: number | null;
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) // private toastr: ToastrService
+  {}
+
+  ngOnInit() {
+    const apiUrl = `${environment.apiUrl}/blog?page=${this.currentPage}&limit=${this.itemsPerPage}`;
+    this.isLoading = true;
+    this.http
+      .get<{ data: Post[]; total: number }>(apiUrl)
+      .subscribe(({ data, total }) => {
+        this.blogPosts = data;
+        this.totalItems = total;
+        this.isLoading = false;
+      });
+    this.isStaff = this.authService.isStaff();
+    console.log(this.isStaff);
+  }
+
+  onPageChange(page: number): void {
+    this.currentPage = page;
+    const apiUrl = `${environment.apiUrl}/blog?page=${this.currentPage}&limit=${this.itemsPerPage}`;
+    this.isLoading = true;
+    this.http
+      .get<{ posts: Post[]; totalItems: number }>(apiUrl)
+      .subscribe(({ posts, totalItems }) => {
+        this.blogPosts = posts;
+        this.totalItems = totalItems;
+        this.isLoading = false;
+      });
+  }
+
+  search() {
+    const apiUrl = `${environment.apiUrl}/blog?page=${this.currentPage}&limit=${this.itemsPerPage}&search=${this.searchQuery}`;
+    this.isLoading = true;
+    this.http
+      .get<{ posts: Post[]; totalItems: number }>(apiUrl)
+      .subscribe(({ posts, totalItems }) => {
+        this.blogPosts = posts;
+        this.totalItems = totalItems;
+        this.isLoading = false;
+      });
+  }
+
+  deleteItem() {
+    const apiUrl = `${environment.apiUrl}/blog/${this.IdDelete}`;
+    this.http.delete(apiUrl).subscribe({
+      next: (response) => {
+        console.log('Item deleted successfully!');
+        const apiUrl = `${environment.apiUrl}/blog?page=${this.currentPage}&limit=${this.itemsPerPage}`;
+        this.isLoading = true;
+        this.http
+          .get<{ data: Post[]; total: number }>(apiUrl)
+          .subscribe(({ data, total }) => {
+            this.blogPosts = data;
+            this.totalItems = total;
+            this.isLoading = false;
+          });
+        // this.toastr.success('Item deleted successfully!', 'Success', {
+        //   positionClass: 'toast-top-right',
+        //   progressBar: true,
+        //   closeButton: true,
+        //   timeOut: 3000,
+        //   extendedTimeOut: 1000,
+        //   tapToDismiss: false,
+        //   toastClass: 'bg-green-500 text-white',
+        //   titleClass: 'font-bold',
+        //   messageClass: 'font-medium'
+        // });
+        this.closeModal();
+      },
+      error: (err) => {
+        // this.toastr.error('Error deleting item', 'Error', {
+        //   positionClass: 'toast-top-right',
+        //   progressBar: true,
+        //   closeButton: true,
+        //   timeOut: 3000,
+        //   extendedTimeOut: 1000,
+        //   tapToDismiss: false,
+        //   toastClass: 'bg-red-500 text-white',
+        //   titleClass: 'font-bold',
+        //   messageClass: 'font-medium'
+        // });
+        console.error('Error deleting item:', err);
+      },
+      complete: () => {
+        console.log('Delete request completed');
+      },
+    });
+  }
+
+  openModal(id: number) {
+    this.isOpenModal = true;
+    this.IdDelete = id;
+  }
+
+  closeModal() {
+    this.isOpenModal = false;
+    this.IdDelete = null;
+  }
 }

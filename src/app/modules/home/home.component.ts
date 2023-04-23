@@ -102,7 +102,7 @@ export class HomeComponent implements OnInit {
       if (this.startIndex >= this.newsList.length) {
         this.startIndex = 0; // if all news have been displayed, start from the first news again
       }
-    }, 5000);
+    }, 4000);
   }
 
   // loadNewsData(): void {

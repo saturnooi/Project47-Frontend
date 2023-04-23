@@ -12,7 +12,10 @@ import * as AWS from 'aws-sdk';
 })
 export class CreateNewsComponent implements OnInit {
   ngOnInit() {
-    this.uploadForm = new FormGroup({ editor: new FormControl(null) });
+    this.uploadForm = new FormGroup({
+      topic: new FormControl(null),
+      editor: new FormControl(null),
+    });
   }
   @ViewChild('editor') editor: any;
 
@@ -23,7 +26,7 @@ export class CreateNewsComponent implements OnInit {
   fileToUpload: any = null;
   uploadForm: FormGroup;
 
-  content: any = '<p>Testing</p>';
+  content: any = '';
   hasFocus = false;
 
   atValues = [
@@ -86,9 +89,10 @@ export class CreateNewsComponent implements OnInit {
   onBlur = () => {
     console.log('Blurred');
   };
+
   onbSubmit = () => {
     const encodedContent = JSON.stringify(this.uploadForm.get('editor')?.value);
-    console.log(encodedContent);
+    console.log(this.uploadForm);
   };
 
   constructor(
@@ -104,7 +108,10 @@ export class CreateNewsComponent implements OnInit {
 
   onFileSelected(event: any) {
     this.fileToUpload = event.target.files[0];
-    // console.log(this.fileToUpload);
+    const fileName = event.target.files[0].name;
+    const labelElement = event.target.parentElement;
+    const labelDiv = labelElement.querySelector('div');
+    labelDiv.textContent = fileName;
   }
 
   onUpload(): void {
@@ -115,7 +122,7 @@ export class CreateNewsComponent implements OnInit {
           // Do something with the uploaded image URL
         })
         .catch((err: any) => {
-          // console.error(err);
+          console.error(err);
           // Handle the error
         });
     } else {
@@ -148,8 +155,8 @@ export class CreateNewsComponent implements OnInit {
       const s3 = new S3({
         endpoint: spacesEndpoint,
 
-        accessKeyId: 'DO00A24Q8GPTQ2QXJMPK',
-        secretAccessKey: 'ghJ6UZTy5+gv2fABcW9pq89sgQnE7lKVfBGfum0rnHk',
+        accessKeyId: 'DO00RXG7QER6A2TJJD7M',
+        secretAccessKey: 'Sv8g74YvjxO7UlSbHaNeqKsX3HCmqXLdUrwYWHMO5g4',
 
         region: 'sgp1',
         signatureVersion: 'v4',
@@ -160,7 +167,7 @@ export class CreateNewsComponent implements OnInit {
         Bucket: 'project-47',
         Key: filename,
         Body: this.fileToUpload,
-        ACL: 'private',
+        ACL: 'public-read',
       };
 
       s3.upload(params, (err: any, data: any) => {

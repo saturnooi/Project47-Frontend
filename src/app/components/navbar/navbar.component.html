@@ -9,8 +9,12 @@
     </div>
 
     <div class="flex items-center gap-x-2">
-      <a type="button" *ngIf="!isLoggedin"
+      <a type="button" *ngIf="!isLoggedin" [routerLink] = "'/login'"
       class="h-full w-40 py-3 text-center text-lg font-semibold rounded-lg p-5 text-white bg-custom-main-light hover:bg-custom-main-super-light">เข้าสู่ระบบ</a>
+      
+      <div>
+        
+      </div>
       <div *ngIf="isLoggedin" class="relative cursor-pointer" >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-amber-500">
           <path fill-rule="evenodd"
@@ -20,12 +24,18 @@
         <div class="w-4 h-4 absolute top-0 right-0 bg-red-500 border-2 border-white rounded-full"></div>
       </div>
       
-      <a href="" class="flex items-center"  [routerLink] = "'/staff/profile'">
+      <a  *ngIf="isLoggedin" href="" class="flex items-center"  [routerLink] = "'/staff/profile'">
   <img class="w-10 h-10 object-cover cursor-pointer"
     src="https://static.vecteezy.com/system/resources/previews/006/487/917/original/man-avatar-icon-free-vector.jpg"
     alt="profile-icon">
   <p class="hidden lg:flex font-bold text-lg ml-2 cursor-pointer">Username</p>
 </a>
+
+<div *ngIf="isLoggedin" >
+  <button (click)="logout()" class="bg-custom-main-light text-white py-2 px-4 rounded-lg hover:bg-white hover:text-custom-main-super-super-dark border border-custom-main-light">
+    Logout
+  </button>
+</div>
 
       
 

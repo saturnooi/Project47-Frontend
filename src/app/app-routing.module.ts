@@ -12,6 +12,8 @@ import { QueueModule } from './modules/queue/queue.module';
 import { DentistWorkingModule } from './modules/dentist-working/dentist-working.module';
 import { DentistWorkingComponent } from './modules/dentist-working/dentist-working.component';
 import { PersonalInformationComponent } from './modules/personal-information/personal-information.component';
+import { ForbiddenComponent } from './errors/forbidden/forbidden.component';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
 
 const routes: Routes = [
   {
@@ -23,7 +25,14 @@ const routes: Routes = [
         loadChildren: () =>
           import('./modules/home/home.module').then((m) => m.HomeModule),
       },
-      { path: 'service', loadChildren: () => import('./modules/service/service.module').then(m => m.ServiceModule) },
+
+      {
+        path: 'service',
+        loadChildren: () =>
+          import('./modules/service/service.module').then(
+            (m) => m.ServiceModule
+          ),
+      },
       {
         path: 'review',
         loadChildren: () =>
@@ -33,6 +42,11 @@ const routes: Routes = [
         path: 'blog',
         loadChildren: () =>
           import('./modules/blog/blog.module').then((m) => m.BlogModule),
+      },
+      {
+        path: 'blog/:id',
+        loadChildren: () =>
+          import('./modules/post/post.module').then((m) => m.PostModule),
       },
       {
         path: 'dentists',
@@ -95,8 +109,14 @@ const routes: Routes = [
                 './modules/personal-information/personal-information.module'
               ).then((m) => m.PersonalInformationModule),
           },
-          
-          { path: 'profile', loadChildren: () => import('./modules/staff-profile/staff-profile.module').then(m => m.StaffProfileModule) },
+
+          {
+            path: 'profile',
+            loadChildren: () =>
+              import('./modules/staff-profile/staff-profile.module').then(
+                (m) => m.StaffProfileModule
+              ),
+          },
         ],
       },
     ],
@@ -109,8 +129,15 @@ const routes: Routes = [
     loadChildren: () =>
       import('./components/login/login.module').then((m) => m.LoginModule),
   },
-  
-  
+  {
+    path: '403',
+    component: ForbiddenComponent,
+  },
+
+  {
+    path: '**',
+    component: NotFoundComponent,
+  },
 ];
 
 @NgModule({
@@ -118,7 +145,5 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class AppRoutingModule {
-  constructor() {
-    console.log('Routing');
-  }
+  constructor() {}
 }

@@ -12,3 +12,33 @@
   @import "~quill/dist/quill.core.css";
   @import "~quill/dist/quill.bubble.css";
   @import "~quill/dist/quill.snow.css";
+
+
+  .toast-container {
+    @apply fixed top-0 right-0 z-50 p-4;
+  }
+  
+  .toast {
+    @apply relative flex items-center justify-between p-3 rounded-md shadow-md;
+  }
+  
+  .toast .toast-message {
+    @apply ml-3 mr-6;
+  }
+  
+  .toast-success {
+    @apply bg-green-500 text-white;
+  }
+  
+  .toast-error {
+    @apply bg-red-500 text-white;
+  }
+  
+  .toast-title {
+    @apply font-bold;
+  }
+  
+  .toast-message {
+    @apply font-medium;
+  }
+  
