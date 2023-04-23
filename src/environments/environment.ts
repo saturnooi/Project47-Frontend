@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:4000',
+  apiUrl: 'https://plankton-app-2-rztmg.ondigitalocean.app/',
 
   awsEndpoint: 'sgp1.digitaloceanspaces.com',
   awsAccessKeyId: 'DO00RXG7QER6A2TJJD7M',
