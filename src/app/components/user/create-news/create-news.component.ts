@@ -6,6 +6,8 @@ import { HttpClient } from '@angular/common/http';
 import { SaveimgeService } from 'src/app/services/saveimge/saveimge.service';
 import * as S3 from 'aws-sdk/clients/s3';
 import * as AWS from 'aws-sdk';
+import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-create-news',
   templateUrl: './create-news.component.html',
@@ -16,10 +18,11 @@ export class CreateNewsComponent implements OnInit {
       topic: new FormControl(null),
       editor: new FormControl(null),
     });
+    console.log('Hi');
   }
   @ViewChild('editor') editor: any;
 
-  imageURL: string = '';
+  imageURL: string | Error = '';
   blured = false;
   focused = false;
 
@@ -28,6 +31,11 @@ export class CreateNewsComponent implements OnInit {
 
   content: any = '';
   hasFocus = false;
+
+  isUploadImg: boolean = false;
+  isUploadimgError: boolean = false;
+  showError: boolean = false;
+  errorMessage: string = '';
 
   atValues = [
     { id: 1, value: 'Fredrik Sundqvist', link: 'https://google.com' },
@@ -66,6 +74,18 @@ export class CreateNewsComponent implements OnInit {
     },
   };
 
+  constructor(
+    public fb: FormBuilder,
+    private saveimgeService: SaveimgeService,
+    private http: HttpClient,
+    private router: Router
+  ) {
+    this.uploadForm = this.fb.group({
+      avatar: [null],
+      name: [''],
+    });
+    // this.modules = quillConfig
+  }
   // "emoji-toolbar": true,
   // "emoji-textarea": false,
   // "emoji-shortname": true,
@@ -90,20 +110,32 @@ export class CreateNewsComponent implements OnInit {
     console.log('Blurred');
   };
 
-  onbSubmit = () => {
+  async onbSubmit() {
+    if (!this.isUploadImg) await this.onUpload();
+    const topic = JSON.stringify(this.uploadForm.get('editor')?.value);
     const encodedContent = JSON.stringify(this.uploadForm.get('editor')?.value);
+    if (!topic || !encodedContent || !this.fileToUpload) {
+      this.showError = true;
+      this.errorMessage = 'กรุณากรอกข้อมูลให้ครบถ้วน';
+    } else {
+      const topic = this.uploadForm.get('topic')?.value;
+      const encodedContent = this.uploadForm.get('editor')?.value;
+      const ployload = {
+        topic: topic,
+        img: this.imageURL,
+        content: encodedContent,
+      };
+      this.http.post(`${environment.apiUrl}/blog`, ployload).subscribe({
+        next: (response) => {
+          this.router.navigate(['/blog']);
+        },
+        error: (error) => {
+          this.showError = true;
+          this.errorMessage = 'ไม่สามารถสร้างข่าวได้';
+        },
+      });
+    }
     console.log(this.uploadForm);
-  };
-
-  constructor(
-    public fb: FormBuilder,
-    private saveimgeService: SaveimgeService
-  ) {
-    this.uploadForm = this.fb.group({
-      avatar: [null],
-      name: [''],
-    });
-    // this.modules = quillConfig
   }
 
   onFileSelected(event: any) {
@@ -112,22 +144,30 @@ export class CreateNewsComponent implements OnInit {
     const labelElement = event.target.parentElement;
     const labelDiv = labelElement.querySelector('div');
     labelDiv.textContent = fileName;
+    this.isUploadImg = false;
   }
 
-  onUpload(): void {
-    if (this.fileToUpload) {
-      this.saveToDigitalOcean()
-        .then((imageUrl: any) => {
-          console.log(`Image URL: ${imageUrl}`);
-          // Do something with the uploaded image URL
-        })
-        .catch((err: any) => {
-          console.error(err);
-          // Handle the error
-        });
-    } else {
-      console.error('No file selected');
-      // Handle the error
+  async onUpload() {
+    try {
+      const url = await this.saveimgeService.uploadFile(
+        this.fileToUpload,
+        'blog'
+      );
+      this.isUploadImg = true;
+      if (typeof this.imageURL === 'string') {
+        this.imageURL = url;
+      }
+      console.log('File uploaded:', url);
+
+      // do something with the URL, such as displaying the uploaded image
+    } catch (error) {
+      this.isUploadimgError = true;
+      this.showError = true;
+      if (!this.fileToUpload) this.errorMessage = 'กรุณาเลือกไฟล์';
+      else this.errorMessage = 'ไม่สามารถ Upload ไฟล์ได้';
+      console.error('Error uploading file:', error);
+
+      // handle the error, such as displaying an error message to the user
     }
   }
 
@@ -146,35 +186,6 @@ export class CreateNewsComponent implements OnInit {
       };
       reader.readAsDataURL(files[0]);
     }
-  }
-
-  saveToDigitalOcean() {
-    // console.log(fileToUpload);
-    return new Promise((resolve, reject) => {
-      const spacesEndpoint = new AWS.Endpoint('sgp1.digitaloceanspaces.com');
-      const s3 = new S3({
-        endpoint: spacesEndpoint,
-
-        accessKeyId: 'DO00RXG7QER6A2TJJD7M',
-        secretAccessKey: 'Sv8g74YvjxO7UlSbHaNeqKsX3HCmqXLdUrwYWHMO5g4',
-
-        region: 'sgp1',
-        signatureVersion: 'v4',
-      });
-
-      const filename = this.fileToUpload.name;
-      const params = {
-        Bucket: 'project-47',
-        Key: filename,
-        Body: this.fileToUpload,
-        ACL: 'public-read',
-      };
-
-      s3.upload(params, (err: any, data: any) => {
-        console.log(`Image uploaded to ${data}`);
-        resolve(data);
-      });
-    });
   }
 
   created(event: Event) {
@@ -200,5 +211,10 @@ export class CreateNewsComponent implements OnInit {
     console.log('blur', $event);
     this.focused = false;
     this.blured = true;
+  }
+
+  closeError() {
+    this.showError = false;
+    console.log(this.showError);
   }
 }

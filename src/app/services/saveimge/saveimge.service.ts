@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
+
 import * as S3 from 'aws-sdk/clients/s3';
+import { environment } from 'src/environments/environment';
+import * as AWS from 'aws-sdk';
 
 @Injectable({
   providedIn: 'root',
@@ -7,25 +10,36 @@ import * as S3 from 'aws-sdk/clients/s3';
 export class SaveimgeService {
   constructor() {}
 
-  saveToDigitalOcean(fileToUpload: any) {
-    // console.log(fileToUpload);
-    return new Promise((resolve, reject) => {
+  uploadFile(file: File, folder: string): Promise<string | Error> {
+    return new Promise<string>((resolve, reject) => {
+      const spacesEndpoint = new AWS.Endpoint(
+        `${environment.awsEndpoint}/${folder}`
+      );
       const s3 = new S3({
-        endpoint: '.sgp1.digitaloceanspaces.com',
-        accessKeyId: 'DO00WX7E9PZJ2GW7JEUT',
-        secretAccessKey: 'LlvvFXRWi1r7OEZh+zqDiNcHvqoZt9HaBMUNQuHdmJc',
+        endpoint: spacesEndpoint,
+
+        accessKeyId: environment.awsAccessKeyId,
+        secretAccessKey: environment.awsSecretAccessKey,
+
+        region: environment.awsRegion,
       });
-      console.log(fileToUpload.name);
-      const filename = fileToUpload.name;
+
       const params = {
-        Bucket: 'project-47',
-        Key: filename,
-        Body: fileToUpload,
+        Bucket: environment.bucket,
+        Key: file.name,
+        Body: file,
+        ACL: 'public-read',
+        ContentType: 'image/jpg',
       };
-      console.log(params);
+
       s3.upload(params, (err: any, data: any) => {
-        console.log(`Image uploaded to ${data}`);
-        resolve(data);
+        if (err) {
+          reject(err);
+        } else {
+          resolve(
+            `https://${environment.bucket}.sgp1.digitaloceanspaces.com/${folder}/${file.name}`
+          );
+        }
       });
     });
   }

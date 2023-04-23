@@ -94,6 +94,13 @@ const routes: Routes = [
               import('./modules/queue/queue.module').then((m) => m.QueueModule),
           },
           {
+            path: 'edit-queue/:id',
+            loadChildren: () =>
+              import('./modules/edit-queue/edit-queue.module').then(
+                (m) => m.EditQueueModule
+              ),
+          },
+          {
             path: 'dentist-working',
             component: DentistWorkingComponent,
             loadChildren: () =>
@@ -108,6 +115,13 @@ const routes: Routes = [
               import(
                 './modules/personal-information/personal-information.module'
               ).then((m) => m.PersonalInformationModule),
+          },
+          {
+            path: 'calendar-work-week',
+            loadChildren: () =>
+              import(
+                './components/calendar-work-week/calendar-work-week.module'
+              ).then((m) => m.CalendarWorkWeekModule),
           },
 
           {
@@ -132,6 +146,14 @@ const routes: Routes = [
   {
     path: '403',
     component: ForbiddenComponent,
+  },
+
+  {
+    path: 'calendar-work-week',
+    loadChildren: () =>
+      import('./components/calendar-work-week/calendar-work-week.module').then(
+        (m) => m.CalendarWorkWeekModule
+      ),
   },
 
   {

@@ -9,7 +9,7 @@
             type="text"
             placeholder="id"
             [(ngModel)]="id"
-            (keyup)="getUser()"
+            disabled="ture"
             
           />
         </div>
@@ -22,6 +22,7 @@
             id="first-name"
             type="text"
             placeholder="First Name"
+            disabled="ture"
             [(ngModel)]="firstName"
           />
         </div>
@@ -31,6 +32,7 @@
             id="last-name"
             type="text"
             placeholder="Last Name"
+            disabled="ture"
             [(ngModel)]="lastName"
           />
         </div>
@@ -51,6 +53,7 @@
           <select
             class="appearance-none block w-full text-gray-700 border border-custom-blue-pale rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
             id="dentist"
+             [(ngModel)]="dentistsId"
           >
           <option value="" >Select a dentist</option>
           <option *ngFor="let dentist of dentists" [value]="dentist.id">
@@ -59,7 +62,6 @@
           </select>
         </div>
       </div>
-      
       <div class="flex flex-wrap -mx-3 mb-6">
         <div class="w-full px-3">
           <input
@@ -75,11 +77,12 @@
         <div class="w-full md:w-1/2 px-3">
           <input
             class="appearance-none block w-full text-gray-700 border border-custom-blue-pale rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-            id="end-time"
+            id="start-time"
             type="time"
             [(ngModel)]="startTime"
           />
         </div>
+
         <div class="w-full md:w-1/2 px-3">
           <input
             class="appearance-none block w-full text-gray-700 border border-custom-blue-pale rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
@@ -93,12 +96,14 @@
         <button
           class="bg-custom-blue text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           type="submit"
-          (click)="uploadQueue()"
+          (click)="updateQueue()"
         >
           Submit
         </button>
       </div>
     </div>
   </div>
-  <div class="col-span-9"><app-calendar-work></app-calendar-work></div>
+  <div class="col-span-9">
+    <app-calendar-work-week></app-calendar-work-week>
+  </div>
 </div>
