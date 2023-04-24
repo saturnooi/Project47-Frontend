@@ -3,6 +3,7 @@ import { ISchedule } from 'src/app/models/user/schedule';
 // import { ISchedule } from '@app/_models/user/schedule';
 import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-schedules',
@@ -10,6 +11,7 @@ import { DatePipe } from '@angular/common';
 })
 export class SchedulesComponent {
   waitConfirm = 5;
+  apiUrl?: string;
   schedules: ISchedule[] = [
     {
       name: 'ณัฐวัฒน์ จันทร์วิสิทธิ์',
@@ -55,7 +57,7 @@ export class SchedulesComponent {
     },
   ];
 
-  data:any = []
+  data: any = [];
 
   daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   selectedMonth: number;
@@ -76,12 +78,12 @@ export class SchedulesComponent {
     'December',
   ];
   selectedDate: any;
-  constructor(private http: HttpClient,private datePipe: DatePipe) {
+  constructor(private http: HttpClient, private datePipe: DatePipe) {
+    this.apiUrl = environment.apiUrl;
     const today = new Date();
     this.selectedMonth = today.getMonth();
     this.selectedYear = today.getFullYear();
     this.generateCalendar();
-    
   }
 
   generateCalendar() {
@@ -139,7 +141,7 @@ export class SchedulesComponent {
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
     console.log(`${month}/${day}/${year}`);
-    await this.getData(`${year}-${month}-${day}`) 
+    await this.getData(`${year}-${month}-${day}`);
   }
 
   goToPrevMonth() {
@@ -163,7 +165,7 @@ export class SchedulesComponent {
   }
 
   async getData(date: string) {
-    const url = `http://localhost:3000/queue/bydate?date=${date}`;
+    const url = `${this.apiUrl}/queue/bydate?date=${date}`;
 
     this.http.get(url).subscribe({
       next: (data: Object) => {
@@ -172,13 +174,11 @@ export class SchedulesComponent {
       },
       error: (error: any) => {
         console.error(error);
-      }}
-      
-    );
+      },
+    });
   }
 
-  converseToTime(date:string) {
-    return this.datePipe.transform(date, 'HH:mm')
+  converseToTime(date: string) {
+    return this.datePipe.transform(date, 'HH:mm');
   }
-  
 }
