@@ -26,7 +26,7 @@ export class AuthService {
 
   public login(username: string, password: string, role: string) {
     // const apiUrl = `${this.apiUrl}/auth/login/${role}`;
-    const apiUrl = `${this.apiUrl}/auth/${role}/login`;
+    const apiUrl = `${this.apiUrl}auth/${role}/login`;
 
     return this.http
       .post<Admin>(apiUrl, {
