@@ -8,7 +8,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 @Component({
   selector: 'app-queue',
   templateUrl: './queue.component.html',
-  styleUrls: ['./queue.component.css']
+  styleUrls: ['./queue.component.css'],
 })
 export class QueueComponent implements OnInit {
   id?: number;
@@ -19,13 +19,18 @@ export class QueueComponent implements OnInit {
   selectedDate: string = '';
   symptom: string = '';
   dentists: any = [];
-  dentistsId?: number;  
+  dentistsId?: number;
+  apiUrl?: string;
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private route: ActivatedRoute,
+    private datePipe: DatePipe
+  ) {}
 
-  constructor(private http: HttpClient,  private router: Router, private route: ActivatedRoute,) { }
-  // private datePipe: DatePipe,
   ngOnInit(): void {
-
-    this.http.get<any>(`http://localhost:3000/dentist/simple`).subscribe({
+    this.apiUrl = environment.apiUrl
+    this.http.get<any>(`${this.apiUrl}/dentist/simple`).subscribe({
       next: (data) => {
         this.dentists = data;
       },
@@ -35,12 +40,14 @@ export class QueueComponent implements OnInit {
     });
   }
   getUser() {
-    this.http.get<any>(`http://localhost:3000/employee/${this.id}`).subscribe({
+    this.http.get<any>(`${this.apiUrl}/patient/${this.id}`).subscribe({
       next: (data) => {
-        this.firstName = data.data.first_name;
-        this.lastName = data.data.last_name;
+        console.log(data);
+        this.firstName = data.first_name;
+        this.lastName = data.last_name;
       },
       error: (error) => {
+        console.log(`${this.apiUrl}/patient/${this.id}`);
         console.log(error);
       },
     });
@@ -49,26 +56,33 @@ export class QueueComponent implements OnInit {
   uploadQueue(): void {
     let playlodeQueue;
     if (!this.dentistsId) {
-     playlodeQueue = {
-        patient: this.id,
-        time_start: new Date(`${this.selectedDate} ${this.startTime}`).toISOString(),
-        time_end: new Date(`${this.selectedDate} ${this.endTime}`).toISOString(),
-        symtom: this.symptom,
-        status: "รอการยืนยันจากคนไข้"
-      };
-    }
-    else  {
       playlodeQueue = {
         patient: this.id,
-        dentist:this.dentistsId,
-        time_start: new Date(`${this.selectedDate} ${this.startTime}`).toISOString(),
-        time_end: new Date(`${this.selectedDate} ${this.endTime}`).toISOString(),
+        time_start: new Date(
+          `${this.selectedDate} ${this.startTime}`
+        ).toISOString(),
+        time_end: new Date(
+          `${this.selectedDate} ${this.endTime}`
+        ).toISOString(),
         symtom: this.symptom,
-        status: "รอการยืนยันจากคนไข้"
+        status: 'รอการยืนยันจากคนไข้',
+      };
+    } else {
+      playlodeQueue = {
+        patient: this.id,
+        dentist: this.dentistsId,
+        time_start: new Date(
+          `${this.selectedDate} ${this.startTime}`
+        ).toISOString(),
+        time_end: new Date(
+          `${this.selectedDate} ${this.endTime}`
+        ).toISOString(),
+        symtom: this.symptom,
+        status: 'รอการยืนยันจากคนไข้',
       };
     }
-  
-    this.http.post(`http://localhost:3000/queue/`, playlodeQueue).subscribe({
+
+    this.http.post(`${this.apiUrl}/queue/`, playlodeQueue).subscribe({
       next: (data) => {
         console.log('Queue updated successfully!', data);
         // You can also redirect the user to another page or refresh the data

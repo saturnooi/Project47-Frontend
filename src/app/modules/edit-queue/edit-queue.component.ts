@@ -22,11 +22,14 @@ export class EditQueueComponent implements OnInit {
   dentists: any = [];
   dentistsId?: number;  
   idParam: any;
+  apiUrl?: string;
+
   ngOnInit(): void {
+    this.apiUrl = environment.apiUrl
     this.idParam = this.route.snapshot.paramMap.get('id');
     this.getQueueData();
 
-    this.http.get<any>(`http://localhost:3000/dentist/simple`).subscribe({
+    this.http.get<any>(`${this.apiUrl}/dentist/simple`).subscribe({
       next: (data) => {
         this.dentists = data;
       },
@@ -42,7 +45,7 @@ export class EditQueueComponent implements OnInit {
 
   getQueueData(): void {
  
-    this.http.get<any>(`http://localhost:3000/queue/${this.idParam}`).subscribe({
+    this.http.get<any>(`${this.apiUrl}/queue/${this.idParam}`).subscribe({
       next: (data) => {
         this.id = data.id;
         this.firstName = data.patient.first_name;
@@ -75,7 +78,7 @@ export class EditQueueComponent implements OnInit {
       status: "รอการยืนยันจากคนไข้"
     };
     console.log(this.dentistsId)
-    this.http.patch(`http://localhost:3000/queue/${this.idParam}`, updatedQueue).subscribe({
+    this.http.patch(`${this.apiUrl}/queue/${this.idParam}`, updatedQueue).subscribe({
       next: (data) => {
         console.log('Queue updated successfully!', data);
         // You can also redirect the user to another page or refresh the data

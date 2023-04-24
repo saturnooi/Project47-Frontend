@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 import { LoginModule } from './components/login/login.module';
 import { AuthLayoutComponent } from './views/auth-layout/auth-layout.component';
 import { UserLayoutComponent } from './views/user-layout/user-layout.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { ForbiddenComponent } from './errors/forbidden/forbidden.component';
@@ -28,9 +28,7 @@ import { NotFoundComponent } from './errors/not-found/not-found.component';
     HttpClientModule,
     
   ],
-
-  providers: [],
-
+  providers: [DatePipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
