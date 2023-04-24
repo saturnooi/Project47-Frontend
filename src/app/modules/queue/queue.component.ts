@@ -84,8 +84,10 @@ export class QueueComponent implements OnInit {
 
     this.http.post(`${this.apiUrl}/queue/`, playlodeQueue).subscribe({
       next: (data) => {
+        
         console.log('Queue updated successfully!', data);
         // You can also redirect the user to another page or refresh the data
+        this.router.navigate(['/staff/schedules']);
       },
       error: (error) => {
         console.log(error);

@@ -80,8 +80,10 @@ export class EditQueueComponent implements OnInit {
     console.log(this.dentistsId)
     this.http.patch(`${this.apiUrl}/queue/${this.idParam}`, updatedQueue).subscribe({
       next: (data) => {
+        
         console.log('Queue updated successfully!', data);
         // You can also redirect the user to another page or refresh the data
+        this.router.navigate(['/staff/schedules']);
       },
       error: (error) => {
         console.log(error);

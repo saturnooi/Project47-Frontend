@@ -84,6 +84,8 @@ export class SchedulesComponent {
     this.selectedMonth = today.getMonth();
     this.selectedYear = today.getFullYear();
     this.generateCalendar();
+    console.log(this.datePipe.transform(today, 'yyyy-MM-dd') || '');
+    this.getData(this.datePipe.transform(today, 'yyyy-MM-dd') || '');
   }
 
   generateCalendar() {
