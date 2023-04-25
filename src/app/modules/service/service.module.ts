@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { FormsModule } from '@angular/forms';
 import { ServiceRoutingModule } from './service-routing.module';
 import { ServiceComponent } from './service.component';
 
@@ -11,7 +11,8 @@ import { ServiceComponent } from './service.component';
   ],
   imports: [
     CommonModule,
-    ServiceRoutingModule
+    ServiceRoutingModule,
+    FormsModule
   ]
 })
 export class ServiceModule { }

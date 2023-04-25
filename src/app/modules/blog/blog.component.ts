@@ -112,6 +112,7 @@ export class BlogComponent implements OnInit {
         //   messageClass: 'font-medium'
         // });
         console.error('Error deleting item:', err);
+        this.isLoading = false;
       },
       complete: () => {
         console.log('Delete request completed');

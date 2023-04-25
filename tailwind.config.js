@@ -21,6 +21,7 @@ module.exports = {
         "custom-gray": "#F2F2F2",
         "custom-gray-dark": "#565E6D",
         "custom-gray-mini-dark": "#D9D9D9",
+        "custom-red-2": "#E74C3C ",
       },
       fontFamily: {
         sfPro: ["SF_PRO", "cursive"],
