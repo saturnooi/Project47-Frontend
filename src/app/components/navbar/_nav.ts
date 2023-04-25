@@ -49,5 +49,8 @@ export const staffNav = [
     {
       name: 'รีวิว',
       path: '/review',
-    },
+  }, {
+      name: 'ตารางการทำงานทันตแพทย์',
+      path: '/staff/dentist-working'
+    }
   ];

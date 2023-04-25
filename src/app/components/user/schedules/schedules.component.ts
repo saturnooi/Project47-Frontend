@@ -29,6 +29,9 @@ export class SchedulesComponent {
   selectedMonth: number;
   selectedYear: number;
   calendarDays: any[] = [];
+
+  // selectType: string = 'select' ;
+
   months: string[] = [
     'January',
     'February',
@@ -266,4 +269,6 @@ export class SchedulesComponent {
       },
     });
   }
+
+  
 }

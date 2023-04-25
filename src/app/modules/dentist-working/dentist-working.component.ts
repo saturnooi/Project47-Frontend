@@ -1,4 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { DatePipe } from '@angular/common';
 interface DateObject {
   dateNumber: number;
   isCurrentMonth: boolean;
@@ -12,11 +15,13 @@ export class DentistWorkingComponent {
   today = new Date();
   daysOfWeek: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   weeks: any[] = [];
+  apiUrl: string = '';
 
+  isOpenAddWork: boolean = false;
   startTime: any = '21';
   endTime: any = '21';
   repetition = 'None';
-  scheduleType = '';
+  scheduleType = 'allDay';
   isModalOpen = true;
   months: string[] = [
     'January',
@@ -32,38 +37,7 @@ export class DentistWorkingComponent {
     'November',
     'December',
   ];
-  dentists = [
-    {
-      name: 'Dr. John Smith',
-    },
-    {
-      name: 'Dr. Sarah Johnson',
-    },
-    {
-      name: 'Dr. David Lee',
-    },
-    {
-      name: 'Dr. Emily Chen',
-    },
-    {
-      name: 'Dr. Michael Wang',
-    },
-    {
-      name: 'Dr. Karen Kim',
-    },
-    {
-      name: 'Dr. James Park',
-    },
-    {
-      name: 'Dr. Laura Davis',
-    },
-    {
-      name: 'Dr. Brian Kim',
-    },
-    {
-      name: 'Dr. Jennifer Lee',
-    },
-  ];
+  dentists: any = [];
 
   selectedMonth: string = this.getMonthName(this.today.getMonth());
   selectedYear: number = 0;
@@ -73,7 +47,20 @@ export class DentistWorkingComponent {
   ShowMonths: boolean = false;
   ShowYears: boolean = false;
   weekIndex: number = 0;
-  constructor() {}
+  dentitsWork: any = [];
+
+  
+  constructor(private http: HttpClient, private datePipe: DatePipe) {
+    this.apiUrl = environment.apiUrl;
+    this.http.get<any>(`${this.apiUrl}/dentist/simple`).subscribe({
+      next: (data) => {
+        this.dentists = data;
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  }
 
   ngOnInit() {
     this.selectedMonth = this.getMonthName(this.today.getMonth());
@@ -82,6 +69,21 @@ export class DentistWorkingComponent {
 
     this.years = this.generateYears(this.today.getFullYear(), 3);
     this.generateCalendar();
+
+    this.http
+      .get<any>(
+        `${this.apiUrl}/dentist-work/byMonth?month=${
+          this.months.indexOf(this.selectedMonth) + 1
+        }&year=${this.selectedYear}`
+      )
+      .subscribe({
+        next: (data) => {
+          this.dentitsWork = data;
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
   }
 
   selectMonth(month: string) {
@@ -181,5 +183,33 @@ export class DentistWorkingComponent {
     weeks.push(currentWeek);
 
     this.weeks = weeks;
+  }
+
+  openAddWork() {
+    this.isOpenAddWork = true;
+  }
+  closeAddWork() {
+    this.isOpenAddWork = false;
+  }
+
+  showWorkTime(date: string, id: number) {
+    const selected = new Date(date);
+    const index = this.dentitsWork.findIndex((appointment: any) => {
+      const dayDate = new Date(appointment.time_start);
+      const selectedDate = new Date(selected);
+      dayDate.setHours(0, 0, 0, 0);
+      selectedDate.setHours(0, 0, 0, 0);
+      return (
+        appointment.dentist.id === id &&
+        dayDate.getTime() === selectedDate.getTime()
+      );
+    });
+    if (index >= 0) return `${this.converseToTime(this.dentitsWork[index].time_start)} - ${this.converseToTime(this.dentitsWork[index].time_end)}` ;
+    return '';
+
+ 
+  }
+  converseToTime(date: string) {
+    return this.datePipe.transform(date, 'HH:mm', '+0700');
   }
 }
