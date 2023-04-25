@@ -20,7 +20,7 @@ export class DentistWorkingComponent {
   isOpenAddWork: boolean = false;
   startTime: any = '21';
   endTime: any = '21';
-  repetition = 'None';
+  repetition = 'null';
   scheduleType = 'allDay';
   isModalOpen = true;
   months: string[] = [
@@ -48,8 +48,10 @@ export class DentistWorkingComponent {
   ShowYears: boolean = false;
   weekIndex: number = 0;
   dentitsWork: any = [];
-
-  
+  addStartTime = '';
+  addEndTime = '';
+  scheduleDate: string = '';
+  dentistId?: number | null;
   constructor(private http: HttpClient, private datePipe: DatePipe) {
     this.apiUrl = environment.apiUrl;
     this.http.get<any>(`${this.apiUrl}/dentist/simple`).subscribe({
@@ -185,11 +187,64 @@ export class DentistWorkingComponent {
     this.weeks = weeks;
   }
 
-  openAddWork() {
+  openAddWork(date: string, id: number) {
     this.isOpenAddWork = true;
+    this.scheduleDate = date;
+    this.dentistId = id;
   }
   closeAddWork() {
     this.isOpenAddWork = false;
+    this.repetition = 'null';
+    this.scheduleType = 'allDay';
+    this.addStartTime = '';
+    this.addEndTime = '';
+    this.scheduleDate = '';
+    this.dentistId = null;
+  }
+
+  AddWork() {
+    let playlodeWork;
+    if (this.scheduleType == 'allDay') {
+      playlodeWork = {
+        dentist: this.dentistId,
+        time_start: new Date(`${this.scheduleDate} 09:00`).toISOString(),
+        time_end: new Date(`${this.scheduleDate} 20:00`).toISOString(),
+        repeatType: this.repetition,
+      };
+    } else {
+      playlodeWork = {
+        dentist: this.dentistId,
+        time_start: new Date(
+          `${this.scheduleDate} ${this.addStartTime}`
+        ).toISOString(),
+        time_end: new Date(
+          `${this.scheduleDate} ${this.addEndTime}`
+        ).toISOString(),
+        repeatType: this.repetition,
+      };
+    }
+    console.log(playlodeWork);
+    this.http.post(`${this.apiUrl}/dentist-work`, playlodeWork).subscribe({
+      next: (data) => {
+        console.log('Queue updated successfully!', data);
+        // You can also redirect the user to another page or refresh the data
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+
+    this.apiUrl = environment.apiUrl;
+    this.http.get<any>(`${this.apiUrl}/dentist/simple`).subscribe({
+      next: (data) => {
+        this.dentists = data;
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
+
+    this.closeAddWork();
   }
 
   showWorkTime(date: string, id: number) {
@@ -204,10 +259,11 @@ export class DentistWorkingComponent {
         dayDate.getTime() === selectedDate.getTime()
       );
     });
-    if (index >= 0) return `${this.converseToTime(this.dentitsWork[index].time_start)} - ${this.converseToTime(this.dentitsWork[index].time_end)}` ;
+    if (index >= 0)
+      return `${this.converseToTime(
+        this.dentitsWork[index].time_start
+      )} - ${this.converseToTime(this.dentitsWork[index].time_end)}`;
     return '';
-
- 
   }
   converseToTime(date: string) {
     return this.datePipe.transform(date, 'HH:mm', '+0700');
