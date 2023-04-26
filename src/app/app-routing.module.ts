@@ -101,6 +101,13 @@ const routes: Routes = [
               ),
           },
           {
+            path: 'next-appointment/:id',
+            loadChildren: () =>
+              import('./modules/next-appointment/next-appointment.module').then(
+                (m) => m.NextAppointmentModule
+              ),
+          },
+          {
             path: 'dentist-working',
             component: DentistWorkingComponent,
             loadChildren: () =>
@@ -136,9 +143,15 @@ const routes: Routes = [
       {
         path: 'dentist',
         children: [
-        { path: 'schedules', loadChildren: () => import('./modules/dentist-schedules/dentist-schedules.module').then(m => m.DentistSchedulesModule) },
-        ]
-      }
+          {
+            path: 'schedules',
+            loadChildren: () =>
+              import(
+                './modules/dentist-schedules/dentist-schedules.module'
+              ).then((m) => m.DentistSchedulesModule),
+          },
+        ],
+      },
     ],
   },
 
@@ -161,7 +174,7 @@ const routes: Routes = [
         (m) => m.CalendarWorkWeekModule
       ),
   },
- 
+
   {
     path: '**',
     component: NotFoundComponent,

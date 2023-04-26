@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { SaveimgeService } from 'src/app/services/saveimge/saveimge.service';
 interface Product {
   image: string;
   title: string;
@@ -14,6 +15,12 @@ interface Product {
   styleUrls: ['./service.component.css'],
 })
 export class ServiceComponent {
+  title = '';
+  description = '';
+  image = '';
+  price = 0;
+  unit = '';
+
   services = [
     {
       image: 'https://via.placeholder.com/150',
@@ -44,13 +51,13 @@ export class ServiceComponent {
     title: '',
     description: '',
     price: 0,
-    unit: ''
+    unit: '',
   };
 
   showModal = false;
 
-  constructor(private http: HttpClient) { 
-    this.apiUrl = environment.apiUrl
+  constructor(private http: HttpClient,private saveimgService:SaveimgeService ) {
+    this.apiUrl = environment.apiUrl;
   }
 
   openModal() {
@@ -62,19 +69,32 @@ export class ServiceComponent {
   }
 
   onSubmit() {
-    this.http.post<Product>(`${this.apiUrl}/products`, this.product)
-      .subscribe({
-        next: (res) => {
-          console.log(res);
-          this.closeModal();
-        },
-        error: (err) => {
-          console.log(err);
-        }
-      });
+    console.log(this.image);
+
+    this.selectedFile;
+    this.saveimgService.uploadFile(this.selectedFile,'/')
+    const service: Product = {
+      image: this.image,
+      title: this.title,
+      description: this.description,
+      price: this.price,
+      unit: this.unit,
+    };
+    // this.http.post<Product>(`${this.apiUrl}/products`, this.product)
+    //   .subscribe({
+    //     next: (res) => {
+    //       console.log(res);
+    //       this.closeModal();
+    //     },
+    //     error: (err) => {
+    //       console.log(err);
+    //     }
+    //   });
   }
 
-  onFileSelected(files: FileList): void {
-    this.selectedFile = files[0];
+  onFileSelected(event: any){
+    const file: File = event.target.files[0];
+    this.selectedFile =file;
+  
   }
 }
