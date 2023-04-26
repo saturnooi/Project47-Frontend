@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { SaveimgeService } from 'src/app/services/saveimge/saveimge.service';
 import { AuthService } from 'src/app/services/auth/auth-service.service';
 interface Product {
-  image: string;
+  image: string | Error;
   title: string;
   description: string;
   price: number;
@@ -18,12 +18,12 @@ interface Product {
 export class ServiceComponent {
   title = '';
   description = '';
-  image = '';
+  image: any = '';
   price = 0;
   unit = '';
 
   isStaff: boolean = false;
-  
+
   services = [
     {
       image: 'https://via.placeholder.com/150',
@@ -59,9 +59,22 @@ export class ServiceComponent {
 
   showModal = false;
 
-  constructor(private http: HttpClient,private saveimgService:SaveimgeService, authService:AuthService ) {
+  constructor(
+    private http: HttpClient,
+    private saveimgService: SaveimgeService,
+    authService: AuthService
+  ) {
     this.apiUrl = environment.apiUrl;
-    this.isStaff = authService.isStaff()
+    this.isStaff = authService.isStaff();
+    this.apiUrl = environment.apiUrl;
+    this.http.get<any>(`${this.apiUrl}/clinic-services`).subscribe({
+      next: (data) => {
+        this.services = data;
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
   }
 
   openModal() {
@@ -72,33 +85,43 @@ export class ServiceComponent {
     this.showModal = false;
   }
 
-  onSubmit() {
-    console.log(this.image);
+  async onSubmit() {
+    console.log(this.selectedFile);
 
-    this.selectedFile;
-    this.saveimgService.uploadFile(this.selectedFile,'/')
+    const url = await this.saveimgService.uploadFile(
+      this.selectedFile,
+      'service'
+    );
+
     const service: Product = {
-      image: this.image,
+      image: url,
       title: this.title,
       description: this.description,
       price: this.price,
       unit: this.unit,
     };
-    // this.http.post<Product>(`${this.apiUrl}/products`, this.product)
-    //   .subscribe({
-    //     next: (res) => {
-    //       console.log(res);
-    //       this.closeModal();
-    //     },
-    //     error: (err) => {
-    //       console.log(err);
-    //     }
-    //   });
+    this.http
+      .post<Product>(`${this.apiUrl}/clinic-services`, service)
+      .subscribe({
+        next: (res) => {
+          this.http.get<any>(`${this.apiUrl}/clinic-services`).subscribe({
+            next: (data) => {
+              this.services = data;
+            },
+            error: (error) => {
+              console.log(error);
+            },
+          });
+          this.closeModal();
+        },
+        error: (err) => {
+          console.log(err);
+        },
+      });
   }
 
-  onFileSelected(event: any){
+  onFileSelected(event: any) {
     const file: File = event.target.files[0];
-    this.selectedFile =file;
-  
+    this.selectedFile = file;
   }
 }

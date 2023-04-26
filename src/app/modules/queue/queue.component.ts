@@ -1,4 +1,3 @@
-
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
@@ -29,7 +28,7 @@ export class QueueComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.apiUrl = environment.apiUrl
+    this.apiUrl = environment.apiUrl;
     this.http.get<any>(`${this.apiUrl}/dentist/simple`).subscribe({
       next: (data) => {
         this.dentists = data;
@@ -84,7 +83,6 @@ export class QueueComponent implements OnInit {
 
     this.http.post(`${this.apiUrl}/queue/`, playlodeQueue).subscribe({
       next: (data) => {
-        
         console.log('Queue updated successfully!', data);
         // You can also redirect the user to another page or refresh the data
         this.router.navigate(['/staff/schedules']);
