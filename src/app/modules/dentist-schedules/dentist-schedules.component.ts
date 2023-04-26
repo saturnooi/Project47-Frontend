@@ -170,10 +170,9 @@ export class DentistSchedulesComponent {
         this.datePipe.transform(this.selectedDate, 'yyyy-MM-dd') || ''
       }&page=${this.currentPage}&limit=${this.itemsPerPage}&dentistId=${this.dentistId}`;
     else if (this.selectedDisplay === 'All')
-      url = `${this.apiUrl}/queue?page=${this.currentPage}&limit=${this.itemsPerPage}`;
-    else if (this.selectedDisplay === 'Wait')
-      url = `${this.apiUrl}/queue/awaitingclinicalconfirmation?page=${this.currentPage}&limit=${this.itemsPerPage}`;
-
+      url = `${this.apiUrl}/queue/dentist?page=${this.currentPage}&limit=${this.itemsPerPage}&dentistId=${this.dentistId}`;
+    
+    
     if (this.sortBy) {
       if (this.sortBy === 'patient' || this.sortBy === 'dentist')
         url += `&sortBy=first_name&sortType=${this.sortBy}`;
@@ -302,7 +301,6 @@ export class DentistSchedulesComponent {
       "confirm_review": 0
     };
 
-    console.log(playlode);
     this.http.post(`${this.apiUrl}/history-appointment`, playlode).subscribe({
       next: (data: any) => {
         this.isLoading = false;
@@ -325,5 +323,7 @@ export class DentistSchedulesComponent {
         this.isLoading = false;
       },
     });
+
+    this.closeAdvice();
   }
 }
