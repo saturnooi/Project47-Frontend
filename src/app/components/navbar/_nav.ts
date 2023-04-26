@@ -54,3 +54,31 @@ export const staffNav = [
       path: '/staff/dentist-working'
     }
   ];
+
+
+  export const dentistNav = [
+    {
+      name: 'หน้าหลัก',
+      path: '',
+    },
+    {
+      name: 'นัดหมาย',
+      path: '/dentist/schedules',
+    },
+    {
+      name: 'ค่าบริการ',
+      path: '/service',
+    },
+    {
+      name: 'ข่าวสาร',
+      path: '/blog',
+    },
+    {
+      name: 'ทันตแพทย์',
+      path: '/dentists',
+    },
+    {
+      name: 'รีวิว',
+      path: '/review',
+    },
+  ];

@@ -133,6 +133,12 @@ const routes: Routes = [
           },
         ],
       },
+      {
+        path: 'dentist',
+        children: [
+        { path: 'schedules', loadChildren: () => import('./modules/dentist-schedules/dentist-schedules.module').then(m => m.DentistSchedulesModule) },
+        ]
+      }
     ],
   },
 
@@ -155,7 +161,7 @@ const routes: Routes = [
         (m) => m.CalendarWorkWeekModule
       ),
   },
-
+ 
   {
     path: '**',
     component: NotFoundComponent,

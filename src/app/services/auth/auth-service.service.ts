@@ -68,11 +68,18 @@ export class AuthService {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     return user ? user.role : '';
   }
+
+  public getUserid(): string {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    return user ? user.id : '';
+  }
   public isStaff(): boolean {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const role = user ? user.role : '';
     return role === 'superadmin' || role === 'admin';
   }
+
+  
   public getAuthStatus() {
     return this.authStatus.asObservable();
   }

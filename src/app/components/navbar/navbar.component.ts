@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { defaultNav, staffNav } from './_nav';
+import { defaultNav, dentistNav, staffNav } from './_nav';
 import { AuthService } from 'src/app/services/auth/auth-service.service';
 import { Router } from '@angular/router';
+import { dentistDetail } from 'src/app/constants/defaultValue';
 
 @Component({
   selector: 'app-navbar',
@@ -11,7 +12,7 @@ import { Router } from '@angular/router';
 export class NavbarComponent {
   isLoggedin: boolean = true;
   isDentist: boolean = false;
-  isStaff: boolean = true;
+  isStaff: boolean = false;
   navbar: any;
 
   // constructor() {
@@ -22,10 +23,10 @@ export class NavbarComponent {
   //   }
   // }
 
-  constructor(private authService: AuthService, private router: Router ,) {
+  constructor(private authService: AuthService, private router: Router) {
     this.authService.authStatus.subscribe((value) => {
       this.isLoggedin = value;
-      console.log(this.authService.getUserRole());
+      console.log(this.isDentist);
       this.isDentist = this.authService.getUserRole() === 'dentist';
       this.isStaff = this.authService.isStaff();
     });
@@ -33,6 +34,9 @@ export class NavbarComponent {
       this.navbar = defaultNav;
     } else if (this.isLoggedin && this.isStaff) {
       this.navbar = staffNav;
+    }
+    else {
+      this.navbar = dentistNav;
     }
   }
 

@@ -1,0 +1,266 @@
+<div class="grid grid-cols-[1fr_2fr] mt-5">
+    <div class="p-4">
+      <div class="grid grid-cols-[1fr_1fr] gap-x-4">
+        <button
+          type="button"
+          class="font-semibold py-3 text-xl rounded-lg drop-shadow-custom-shadow hover:bg-custom-main-light"
+          (click)="selectedDisplayAll()"
+          [ngClass]="{
+            'bg-white text-custom-main-dark border-custom-main-super-light border-[1px] hover:text-white':
+              selectedDisplay !== 'All',
+            'bg-custom-main-light text-white hover:text-custom-main-dark':
+              selectedDisplay === 'All'
+          }"
+        >
+          ทั้งหมด
+        </button>
+        <button
+          type="button"
+          class="font-semibold py-3 text-xl rounded-lg drop-shadow-custom-shadow hover:bg-custom-main-light"
+          (click)="selectedDisplayDay()"
+          [ngClass]="{
+            'bg-white text-custom-main-dark border-custom-main-super-light border-[1px] hover:text-white':
+              selectedDisplay !== 'Day',
+            'bg-custom-main-light text-white hover:text-custom-main-dark':
+              selectedDisplay === 'Day'
+          }"
+        >
+          วัน
+        </button>
+        <!-- <div class="relative">
+          <button
+            type="button"
+            class="flex w-full justify-center font-semibold py-3 text-xl rounded-lg drop-shadow-custom-shadow hover:bg-custom-main-light"
+            (click)="selectedDisplayWait()"
+            [ngClass]="{
+              'bg-white text-custom-main-dark border-custom-main-super-light border-[1px] hover:text-white':
+                selectedDisplay !== 'Wait',
+              'bg-custom-main-light text-white hover:text-custom-main-dark':
+                selectedDisplay === 'Wait'
+            }"
+          >
+            รอการยืนยัน
+          </button>
+          <div
+            class="flex justify-center items-center absolute -top-3 -right-3 text-white bg-custom-red shadow-lg w-7 h-7 rounded-full"
+          >
+            {{ waitConfirm }}
+          </div>
+        </div> -->
+      </div>
+  
+      <div class="w-full max-w-md mx-auto mt-5">
+        <div class="flex justify-between items-center mb-4">
+          <button
+            class="text-gray-600 hover:text-gray-900"
+            (click)="goToPrevMonth()"
+          >
+            <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+              <path
+                d="M15 19l-7-7 7-7"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+          <div class="text-gray-700 font-medium">
+            {{ months[selectedMonth] }} {{ selectedYear }}
+          </div>
+          <button
+            class="text-gray-600 hover:text-gray-900"
+            (click)="goToNextMonth()"
+          >
+            <svg class="h-6 w-6 fill-current" viewBox="0 0 24 24">
+              <path
+                d="M9 5l7 7-7 7"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+        <div class="grid grid-cols-7 gap-2">
+          <div
+            *ngFor="let day of calendarDays"
+            (click)="selectDate(day.date)"
+            class="flex justify-center items-center rounded-full w-8 h-8 text-base font-medium cursor-pointer"
+            [ngClass]="{
+              'bg-custom-main-light text-white': day.isSelected,
+              'bg-gray-300 hover:bg-gray-400 ':
+                day.isCurrentMonth && !day.isSelected,
+              'bg-gray-100': !day.isCurrentMonth && !day.isSelected
+            }"
+            [style.fontSize.px]="13"
+          >
+            <div
+              [ngClass]="{
+                'text-white': day.isSelected,
+                'text-gray-900 ': day.isCurrentMonth && !day.isSelected,
+                'text-gray-500': !day.isCurrentMonth && !day.isSelected
+              }"
+            >
+              {{ day.date.getDate() }}
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <input
+        placeholder="ค้นหา"
+        class="flex w-full bg-white text-custom-main-dark font-semibold p-3 text-xl rounded-lg border-custom-main-super-light border-[1px] drop-shadow-custom-shadow mt-8 placeholder-custom-main-dark focus:outline-none"
+        type="text"
+        [(ngModel)]="search"
+        (keyup)="getData()"
+      />
+  
+      <select
+        aria-label="SortBy"
+        class="flex w-full bg-white text-custom-main-dark font-semibold p-3 text-xl rounded-lg border-custom-main-super-light border-[1px] drop-shadow-custom-shadow mt-8 placeholder-custom-main-dark focus:outline-none"
+        name="sortBy"
+        [(ngModel)]="sortBy"
+        (change)="getData()"
+      >
+        <option [ngValue]="''">sort by</option>
+        <option [ngValue]="'patient'">ชื่อ</option>
+        <option [ngValue]="'status'">สถานะ</option>
+        <option [ngValue]="'symtom'">อาการ</option>
+        <option [ngValue]="'dentist'">ทันตแพทย์</option>
+      </select>
+  
+      <!-- <select
+        aria-label="Filter"
+        class="flex w-full bg-white text-custom-main-dark font-semibold p-3 text-xl rounded-lg border-custom-main-super-light border-[1px] drop-shadow-custom-shadow mt-8 placeholder-custom-main-dark focus:outline-none"
+        name="filter"
+      >
+        <option>filter</option>
+        <option>lorem 2</option>
+        <option>lorem 3</option>
+      </select> -->
+  
+      <!-- <a
+        [routerLink]="'/staff/queue'"
+        class="button flex w-full mt-10 justify-center bg-custom-main-light text-white font-semibold py-3 text-xl rounded-lg drop-shadow-custom-shadow hover:bg-custom-main-light hover:text-custom-main-dark"
+      >
+        นัดหมายใหม่
+      </a> -->
+    </div>
+  
+    <div class="flex flex-col gap-y-6 p-4 overflow-y-auto">
+      <div *ngIf="isLoading" class="text-center">Loading...</div>
+        <div *ngFor="let data of data">
+          <div *ngIf="!isLoading">
+          <h1
+            *ngIf="selectedDisplay !== 'Day'"
+            class="text-custom-main-light text-2xl font-bold p-3"
+          >
+            {{ converseToDate(data.time_start) }}
+          </h1>
+          <div
+            class="grid grid-cols-[1.5fr_1fr] px-4 py-6 rounded-lg text-custom-main-super-dark text-xl bg-opacity-50 bg-custom-main-light"
+          >
+            <div class="flex flex-col gap-y-2">
+              <p>
+                ชื่อ - นามสกุล : &nbsp;{{ data.patient.prefix }}&nbsp;{{
+                  data.patient.first_name
+                }}&nbsp;{{ data.patient.last_name }}
+              </p>
+              <p>
+                อาการ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                : &nbsp;{{ data.symtom }}
+              </p>
+              <p *ngIf="data.dentist != null">
+                ทันตแพทย์&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp;{{
+                  data.dentist.prefix || ""
+                }}&nbsp;{{ data.dentist.first_name || "" }}&nbsp;{{
+                  data.dentist.last_name || ""
+                }}
+              </p>
+              <p *ngIf="data.dentist == null">
+                ทันตแพทย์&nbsp;&nbsp;&nbsp;&nbsp; : &nbsp; -
+              </p>
+              <p>
+                โรคประจำตัว&nbsp;&nbsp; : &nbsp;{{
+                  data.patient.underlying_disease
+                    ? data.patient.underlying_disease
+                    : "-"
+                }}
+              </p>
+              <p>
+                แพ้ยา&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                : &nbsp;{{ data.allergy ? data.allergy : "-" }}
+              </p>
+            </div>
+            <div>
+              <p>
+                เวลา &nbsp;&nbsp;&nbsp;: {{ converseToTime(data.time_start) }} น.
+              </p>
+              <p>สถานะ : {{ data.status }}</p>
+            </div>
+            <div class="grid grid-cols-3 gap-3">
+                <button
+                *ngIf="data.status === 'รอพบทันตแพทย์'"
+                (click)="OpenAdvice(data.dentist.id,data.patient.id,data.time_start,data.id)"
+                class="button flex w-full mt-10 justify-center bg-custom-light-aqua py-3 text-xl rounded-lg drop-shadow-custom-shadow hover:bg-custom-main-light hover:text-custom-main-dark"
+              >
+                รักษาเสร็จสิ้น
+              </button>
+
+              <!-- <a
+                *ngIf="data.status === 'รอการยืนยันจากคลินิก'"
+                [routerLink]="['/staff/edit-queue', data.id]"
+                class="button flex w-full mt-10 justify-center bg-custom-main-light text-white font-semibold py-3 text-xl rounded-lg drop-shadow-custom-shadow hover:bg-custom-main-light hover:text-custom-main-dark"
+              >
+                ยืนยันการนัดหมาย
+              </a>
+  
+              <button
+                *ngIf="data.status === 'นัดหมายเสร็จสิ้น'"
+                [routerLink]="['/staff/edit-queue', data.id]"
+                class="button flex w-full mt-10 justify-center bg-custom-light-aqua py-3 text-xl rounded-lg drop-shadow-custom-shadow hover:bg-custom-main-light hover:text-custom-main-dark"
+              >
+                นัดหมายครั้งถัดไป
+              </button>
+  
+              <button
+                *ngIf="
+                  data.status === 'รอการยืนยันจากคนไข้' ||
+                  data.status === 'รอการยืนยันจากคลินิก'
+                "
+                class="button flex w-full mt-10 justify-center bg-custom-light-aqua py-3 text-xl rounded-lg drop-shadow-custom-shadow hover:bg-custom-main-light hover:text-custom-main-dark"
+                (click)="OpenCancel(data.id)"
+              >
+                ยกเลิกนัด
+              </button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-pagination
+    class="m-5"
+    [currentPage]="currentPage"
+    [pageSize]="itemsPerPage"
+    [totalItems]="totalItems"
+    (pageChange)="onPageChange($event)"
+  ></app-pagination>
+  
+  <div *ngIf="isOpenAdvice" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white rounded-lg p-8 w-96">
+      <h2 class="text-lg font-medium mb-4">สรุป</h2>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-medium mb-2" for="advice">คำแนะนำ</label>
+        <textarea class="border rounded-lg py-2 px-3 w-full" id="advice" name="advice"></textarea>
+      </div>
+      <div class="mb-4">
+        <label class="block text-gray-700 font-medium mb-2" for="treatment-history">รายละเอียดการรักษา</label>
+        <textarea class="border rounded-lg py-2 px-3 w-full" id="treatment-history" name="treatment-history"></textarea>
+      </div>
+      <div class="flex justify-end">
+        <button class="bg-blue-500 text-white px-4 py-2 rounded-lg" (click)="confirmAdvice()">ยืนยัน</button>
+        <button class="bg-gray-100 text-white px-4 py-2 rounded-lg" (click)="closeAdvice()">ยกเลิก</button>
+      </div>
+    </div>
+  </div>

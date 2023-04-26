@@ -77,7 +77,8 @@ export class EditQueueComponent implements OnInit {
       symtom: this.symptom,
       status: "รอการยืนยันจากคนไข้"
     };
-    console.log(this.dentistsId)
+
+    console.log(updatedQueue);
     this.http.patch(`${this.apiUrl}/queue/${this.idParam}`, updatedQueue).subscribe({
       next: (data) => {
         
