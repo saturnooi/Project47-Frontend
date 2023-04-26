@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { environment } from 'src/environments/environment';
 import { interval } from 'rxjs';
+import { AuthService } from 'src/app/services/auth/auth-service.service';
 
 @Component({
   selector: 'app-dentist-schedules',
@@ -34,6 +35,8 @@ export class DentistSchedulesComponent {
   selectedYear: number;
   calendarDays: any[] = [];
 
+  
+  
   // selectType: string = 'select' ;
 
   months: string[] = [
@@ -51,7 +54,7 @@ export class DentistSchedulesComponent {
     'December',
   ];
   selectedDate: Date = new Date();
-  constructor(private http: HttpClient, private datePipe: DatePipe ) {
+  constructor(private http: HttpClient, private datePipe: DatePipe,  authService: AuthService ) {
     this.apiUrl = environment.apiUrl;
     const today = new Date();
 
@@ -61,11 +64,8 @@ export class DentistSchedulesComponent {
 
     this.getData();
     this.selectDate(today);
-    console.log('today', today);
-    this.getCountWati();
-    interval(10000).subscribe(() => {
-      this.getCountWati();
-    });
+
+    this.dentistId= authService.getUserid(); 
   }
 
   detail: string = '';
@@ -166,9 +166,9 @@ export class DentistSchedulesComponent {
   async getData() {
     let url = '';
     if (this.selectedDisplay === 'Day')
-      url = `${this.apiUrl}/queue/bydate?date=${
+      url = `${this.apiUrl}/queue/bydate/dentist?date=${
         this.datePipe.transform(this.selectedDate, 'yyyy-MM-dd') || ''
-      }&page=${this.currentPage}&limit=${this.itemsPerPage}`;
+      }&page=${this.currentPage}&limit=${this.itemsPerPage}&dentistId=${this.dentistId}`;
     else if (this.selectedDisplay === 'All')
       url = `${this.apiUrl}/queue?page=${this.currentPage}&limit=${this.itemsPerPage}`;
     else if (this.selectedDisplay === 'Wait')
@@ -294,16 +294,17 @@ export class DentistSchedulesComponent {
 
   confirmAdvice() {
     const playlode = {
-      date_appoint: this.date,
-      dentist: this.dentistId,
-      patient: this.patientId,
-      detail: this.detail,
-      advise: this.detail,
-      confirm_review: 0,
+      "date_appoint": this.date,
+      "dentist": this.dentistId,
+      "patient": this.patientId,
+      "detail": this.detail,
+      "advise": this.advise,
+      "confirm_review": 0
     };
+
+    console.log(playlode);
     this.http.post(`${this.apiUrl}/history-appointment`, playlode).subscribe({
       next: (data: any) => {
-        this.getData();
         this.isLoading = false;
         const url = `${this.apiUrl}/queue/${this.postId}`;
         this.isLoading = true;

@@ -69,7 +69,7 @@ export class AuthService {
     return user ? user.role : '';
   }
 
-  public getUserid(): string {
+  public getUserid(): number {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     return user ? user.id : '';
   }

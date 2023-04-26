@@ -252,11 +252,11 @@
       <h2 class="text-lg font-medium mb-4">สรุป</h2>
       <div class="mb-4">
         <label class="block text-gray-700 font-medium mb-2" for="advice">คำแนะนำ</label>
-        <textarea class="border rounded-lg py-2 px-3 w-full" id="advice" name="advice"></textarea>
+        <textarea class="border rounded-lg py-2 px-3 w-full" id="advice" [(ngModel)]="advise" name="advice"></textarea>
       </div>
       <div class="mb-4">
         <label class="block text-gray-700 font-medium mb-2" for="treatment-history">รายละเอียดการรักษา</label>
-        <textarea class="border rounded-lg py-2 px-3 w-full" id="treatment-history" name="treatment-history"></textarea>
+        <textarea class="border rounded-lg py-2 px-3 w-full" id="treatment-history" [(ngModel)]="detail" name="treatment-history"></textarea>
       </div>
       <div class="flex justify-end">
         <button class="bg-blue-500 text-white px-4 py-2 rounded-lg" (click)="confirmAdvice()">ยืนยัน</button>
