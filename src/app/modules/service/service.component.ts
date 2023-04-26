@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { SaveimgeService } from 'src/app/services/saveimge/saveimge.service';
+import { AuthService } from 'src/app/services/auth/auth-service.service';
 interface Product {
   image: string;
   title: string;
@@ -21,6 +22,8 @@ export class ServiceComponent {
   price = 0;
   unit = '';
 
+  isStaff: boolean = false;
+  
   services = [
     {
       image: 'https://via.placeholder.com/150',
@@ -56,8 +59,9 @@ export class ServiceComponent {
 
   showModal = false;
 
-  constructor(private http: HttpClient,private saveimgService:SaveimgeService ) {
+  constructor(private http: HttpClient,private saveimgService:SaveimgeService, authService:AuthService ) {
     this.apiUrl = environment.apiUrl;
+    this.isStaff = authService.isStaff()
   }
 
   openModal() {
