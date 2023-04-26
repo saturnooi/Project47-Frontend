@@ -201,7 +201,7 @@
           <div class="grid grid-cols-3 gap-3">
             <a
               *ngIf="data.status === 'รอการยืนยันจากคลินิก'"
-              [routerLink]="['/staff/edit-queue', data.patient.id]"
+              [routerLink]="['/staff/edit-queue', data.id]"
               class="button flex w-full mt-10 justify-center bg-custom-main-light text-white font-semibold py-3 text-xl rounded-lg drop-shadow-custom-shadow hover:bg-custom-main-light hover:text-custom-main-dark"
             >
               ยืนยันการนัดหมาย
@@ -209,7 +209,7 @@
 
             <button
               *ngIf="data.status === 'นัดหมายเสร็จสิ้น'"
-              [routerLink]="['/staff/next-appointment', data.id]"
+              [routerLink]="['/staff/next-appointment', data.patient.id]"
               class="button flex w-full mt-10 justify-center bg-custom-light-aqua py-3 text-xl rounded-lg drop-shadow-custom-shadow hover:bg-custom-main-light hover:text-custom-main-dark"
             >
               นัดหมายครั้งถัดไป
